@@ -199,7 +199,7 @@ function analizeLine(line) {
     // core.error(message, properties);
 }
 function parseLine(line) {
-    const data = line.split(':', 3);
+    const data = line.split(':', 4);
     const [file, row, column, message] = data;
     if (file === undefined ||
         row === undefined ||
