@@ -1,0 +1,38 @@
+
+name: 'ktlint check'
+description: 'Runs ktlint check'
+author: 'Anton Musichin'
+inputs:
+  version:
+    required: false
+    description: 'Version of ktlint, e.g. "0.42.1"'
+  annotations:
+    required: false
+    description: 'Enables or disables annotations'
+
+  # ktlint
+  android:
+    required: false
+  disabledRules:
+    required: false
+  format:
+    required: false
+  limit:
+    required: false
+  relative:
+    required: false
+  reporter:
+    required: false
+  ruleset:
+    required: false
+  editorconfig:
+    required: false
+  experimental:
+    required: false
+  baseline:
+    required: false
+  patterns:
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
