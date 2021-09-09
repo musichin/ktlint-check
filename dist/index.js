@@ -124,9 +124,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.buildArguments = exports.lint = void 0;
-const cmd = __importStar(__nccwpck_require__(7351));
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
+const reporting_1 = __nccwpck_require__(5036);
 function buildArguments(options) {
     const args = [];
     if (options === undefined) {
@@ -174,7 +174,7 @@ function lint(options) {
         core.startGroup('ktlint check');
         const execOptions = {
             listeners: {
-                stdline: analizeLine,
+                stdline: reporting_1.processPlainLine,
             },
             ignoreReturnCode: true,
         };
@@ -187,33 +187,6 @@ function lint(options) {
     });
 }
 exports.lint = lint;
-function analizeLine(line) {
-    const { file, row, column, message } = parseLine(line);
-    const properties = {
-        startLine: row,
-        startColumn: column,
-        file,
-    };
-    // TODO https://github.com/actions/toolkit/issues/892
-    cmd.issueCommand('error', properties, message);
-    // core.error(message, properties);
-}
-function parseLine(line) {
-    const data = line.split(':', 4);
-    const [file, row, column, message] = data;
-    if (file === undefined ||
-        row === undefined ||
-        column === undefined ||
-        message == undefined) {
-        throw new Error(`Could not parse line: ${line}`);
-    }
-    return {
-        file: file.trim(),
-        row: Number(row),
-        column: Number(column),
-        message: message.trim(),
-    };
-}
 
 
 /***/ }),
@@ -267,6 +240,73 @@ function run() {
     });
 }
 run().catch(core.setFailed);
+
+
+/***/ }),
+
+/***/ 5036:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.processPlainLine = exports.parsePlainLine = void 0;
+const cmd = __importStar(__nccwpck_require__(7351));
+const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/g;
+function processPlainLine(line) {
+    const { file, row, column, message } = parsePlainLine(line);
+    const properties = {
+        startLine: row,
+        startColumn: column,
+        file,
+    };
+    // TODO https://github.com/actions/toolkit/issues/892
+    cmd.issueCommand('error', properties, message);
+    // core.error(message, properties);
+}
+exports.processPlainLine = processPlainLine;
+function parsePlainLine(line) {
+    const data = line.match(PLAIN_LINE_REGEX);
+    if (!data) {
+        throwErrorPlainLine(line);
+    }
+    const [, file, row, column, message] = data;
+    if (file === undefined ||
+        row === undefined ||
+        column === undefined ||
+        message == undefined) {
+        throwErrorPlainLine(line);
+    }
+    return {
+        file: file.trim(),
+        row: Number(row),
+        column: Number(column),
+        message: message.trim(),
+    };
+}
+exports.parsePlainLine = parsePlainLine;
+function throwErrorPlainLine(line) {
+    throw new Error(`Could not parse line: ${line}`);
+}
 
 
 /***/ }),

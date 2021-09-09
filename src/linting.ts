@@ -1,14 +1,7 @@
-import * as cmd from '@actions/core/lib/command';
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
+import {processPlainLine} from './reporting';
 import {Options} from './types';
-
-interface Issue {
-  file: string;
-  column: number;
-  row: number;
-  message: string;
-}
 
 function buildArguments(options?: Options): string[] {
   const args = [];
@@ -81,7 +74,7 @@ async function lint(options?: Options) {
   core.startGroup('ktlint check');
   const execOptions = {
     listeners: {
-      stdline: analizeLine,
+      stdline: processPlainLine,
     },
     ignoreReturnCode: true,
   };
@@ -92,40 +85,6 @@ async function lint(options?: Options) {
   if (exitCode !== 0) {
     throw new Error(`ktlint exited with code ${exitCode}`);
   }
-}
-
-function analizeLine(line: string) {
-  const {file, row, column, message} = parseLine(line);
-  const properties = {
-    startLine: row,
-    startColumn: column,
-    file,
-  };
-  // TODO https://github.com/actions/toolkit/issues/892
-  cmd.issueCommand('error', properties, message);
-  // core.error(message, properties);
-}
-
-function parseLine(line: string): Issue {
-  const data = line.split(':', 4);
-
-  const [file, row, column, message] = data;
-
-  if (
-    file === undefined ||
-    row === undefined ||
-    column === undefined ||
-    message == undefined
-  ) {
-    throw new Error(`Could not parse line: ${line}`);
-  }
-
-  return {
-    file: file.trim(),
-    row: Number(row),
-    column: Number(column),
-    message: message.trim(),
-  };
 }
 
 export {lint, buildArguments};
