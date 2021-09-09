@@ -1,6 +1,6 @@
 import * as cmd from '@actions/core/lib/command';
 
-const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/g;
+const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/;
 
 interface Issue {
   file: string;
