@@ -271,7 +271,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.processPlainLine = exports.parsePlainLine = void 0;
 const cmd = __importStar(__nccwpck_require__(7351));
-const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/g;
+const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/;
 function processPlainLine(line) {
     const { file, row, column, message } = parsePlainLine(line);
     const properties = {
