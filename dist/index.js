@@ -213,7 +213,7 @@ function run() {
         yield (0, setup_linter_1.install)(version);
         const reporterTool = annotate ? yield (0, setup_reporter_1.install)() : null;
         const reporter = reporterTool
-            ? yield createReporter(reporterTool, true)
+            ? yield createReporter(reporterTool, warn)
             : null;
         const options = Object.assign(Object.assign({}, input_1.default), (reporter && {
             reporter: [...((_a = input_1.default.reporter) !== null && _a !== void 0 ? _a : []), reporter],
