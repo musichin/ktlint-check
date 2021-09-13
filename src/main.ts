@@ -29,7 +29,7 @@ async function run() {
   await installLinter(version);
   const reporterTool = annotate ? await installReporter() : null;
   const reporter = reporterTool
-    ? await createReporter(reporterTool, true)
+    ? await createReporter(reporterTool, warn)
     : null;
   const options: Options = {
     ...input,
