@@ -6,10 +6,11 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
-var _a, _b;
+var _a, _b, _c;
 const core_1 = __nccwpck_require__(2186);
 const VERSION_DEFAUL = '0.42.1';
-const ANNOTATIONS_DEFAULT = true;
+const ANNOTATE_DEFAULT = true;
+const WARN_DEFAULT = false;
 function getBoolean(name) {
     try {
         return (0, core_1.getBooleanInput)(name);
@@ -68,10 +69,12 @@ const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
 const patterns = getList('patterns');
 const version = (_a = getString('version')) !== null && _a !== void 0 ? _a : VERSION_DEFAUL;
-const annotations = (_b = getBoolean('annotations')) !== null && _b !== void 0 ? _b : ANNOTATIONS_DEFAULT;
+const annotate = (_b = getBoolean('annotate')) !== null && _b !== void 0 ? _b : ANNOTATE_DEFAULT;
+const warn = (_c = getBoolean('warn')) !== null && _c !== void 0 ? _c : WARN_DEFAULT;
 const input = {
     version,
-    annotations,
+    annotate,
+    warn,
     android,
     disabledRules,
     format,
@@ -90,43 +93,12 @@ module.exports = input;
 /***/ }),
 
 /***/ 1838:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.buildArguments = exports.lint = void 0;
-const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
-const reporting_1 = __nccwpck_require__(5036);
+exports.buildArguments = void 0;
 function buildArguments(options) {
     const args = [];
     if (options === undefined) {
@@ -169,24 +141,6 @@ function buildArguments(options) {
     return args;
 }
 exports.buildArguments = buildArguments;
-function lint(options) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.startGroup('ktlint check');
-        const execOptions = {
-            listeners: {
-                stdline: reporting_1.processPlainLine,
-            },
-            ignoreReturnCode: true,
-        };
-        const args = buildArguments(options);
-        const exitCode = yield exec.exec('ktlint', args, execOptions);
-        core.endGroup();
-        if (exitCode !== 0) {
-            throw new Error(`ktlint exited with code ${exitCode}`);
-        }
-    });
-}
-exports.lint = lint;
 
 
 /***/ }),
@@ -229,14 +183,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
+const exec_1 = __nccwpck_require__(1514);
 const input_1 = __importDefault(__nccwpck_require__(8657));
-const setup_1 = __nccwpck_require__(7391);
+const setup_linter_1 = __nccwpck_require__(7231);
+const setup_reporter_1 = __nccwpck_require__(5795);
 const linting_1 = __nccwpck_require__(1838);
-function run() {
+function lint(args) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { version } = input_1.default;
-        yield (0, setup_1.install)(version);
-        yield (0, linting_1.lint)(input_1.default);
+        core.startGroup('ktlint check');
+        const execOptions = {
+            ignoreReturnCode: true,
+        };
+        const exitCode = yield (0, exec_1.exec)('ktlint', args, execOptions);
+        core.endGroup();
+        return exitCode;
+    });
+}
+function createReporter(path, warn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const args = warn ? '?warning' : '';
+        return `--reporter="github-workflow${args},artifact=${path}`;
+    });
+}
+function run() {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const { version, warn, annotate } = input_1.default;
+        yield (0, setup_linter_1.install)(version);
+        const reporterPath = annotate ? yield (0, setup_reporter_1.install)() : null;
+        const reporter = reporterPath
+            ? yield createReporter(reporterPath, warn)
+            : null;
+        const options = Object.assign(Object.assign({}, input_1.default), (reporter && {
+            reporter: [...((_a = input_1.default.reporter) !== null && _a !== void 0 ? _a : []), reporter],
+        }));
+        const args = (0, linting_1.buildArguments)(options);
+        const exitCode = yield lint(args);
+        if (exitCode !== 0 && !warn) {
+            throw new Error(`ktlint exited with code ${exitCode}`);
+        }
     });
 }
 run().catch(core.setFailed);
@@ -244,74 +229,7 @@ run().catch(core.setFailed);
 
 /***/ }),
 
-/***/ 5036:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.processPlainLine = exports.parsePlainLine = void 0;
-const cmd = __importStar(__nccwpck_require__(7351));
-const PLAIN_LINE_REGEX = /^([^:]+):([^:]+):([^:]+):(.*)$/;
-function processPlainLine(line) {
-    const { file, row, column, message } = parsePlainLine(line);
-    const properties = {
-        startLine: row,
-        startColumn: column,
-        file,
-    };
-    // TODO https://github.com/actions/toolkit/issues/892
-    cmd.issueCommand('error', properties, message);
-    // core.error(message, properties);
-}
-exports.processPlainLine = processPlainLine;
-function parsePlainLine(line) {
-    const data = line.match(PLAIN_LINE_REGEX);
-    if (!data) {
-        throwErrorPlainLine(line);
-    }
-    const [, file, row, column, message] = data;
-    if (file === undefined ||
-        row === undefined ||
-        column === undefined ||
-        message == undefined) {
-        throwErrorPlainLine(line);
-    }
-    return {
-        file: file.trim(),
-        row: Number(row),
-        column: Number(column),
-        message: message.trim(),
-    };
-}
-exports.parsePlainLine = parsePlainLine;
-function throwErrorPlainLine(line) {
-    throw new Error(`Could not parse line: ${line}`);
-}
-
-
-/***/ }),
-
-/***/ 7391:
+/***/ 7231:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -393,6 +311,70 @@ function install(version) {
         const toolPath = yield getOrDownload(finalVersion);
         const execPath = path.join(toolPath, 'ktlint');
         fs.chmodSync(execPath, '777');
+        core.addPath(toolPath);
+        return toolPath;
+    });
+}
+exports.install = install;
+
+
+/***/ }),
+
+/***/ 5795:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.install = void 0;
+const tc = __importStar(__nccwpck_require__(7784));
+const core = __importStar(__nccwpck_require__(2186));
+const KTLINT_GITHUB_VERSION = '1.0.0';
+function buildDownloadUrl(version) {
+    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.ja`;
+}
+function getOrDownload(version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cachedPath = tc.find('ktlint-github-reporter.jar', version);
+        if (cachedPath) {
+            return cachedPath;
+        }
+        const downloadUrl = buildDownloadUrl(version);
+        const downloadedFile = yield tc.downloadTool(downloadUrl);
+        return yield tc.cacheFile(downloadedFile, 'ktlint-github-reporter.jar', 'ktlint-github-reporter', version);
+    });
+}
+function install() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const toolPath = yield getOrDownload(KTLINT_GITHUB_VERSION);
         core.addPath(toolPath);
         return toolPath;
     });

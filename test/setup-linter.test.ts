@@ -1,5 +1,5 @@
 import {expect, it, describe} from '@jest/globals';
-import {install, getLatestVersion} from '../src/setup';
+import {install, getLatestVersion} from '../src/setup-linter';
 
 describe('#setup', () => {
   describe('#getLatestVersion', () => {

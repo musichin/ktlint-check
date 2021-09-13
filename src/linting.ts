@@ -1,6 +1,3 @@
-import * as core from '@actions/core';
-import * as exec from '@actions/exec';
-import {processPlainLine} from './reporting';
 import {Options} from './types';
 
 function buildArguments(options?: Options): string[] {
@@ -70,21 +67,4 @@ function buildArguments(options?: Options): string[] {
   return args;
 }
 
-async function lint(options?: Options) {
-  core.startGroup('ktlint check');
-  const execOptions = {
-    listeners: {
-      stdline: processPlainLine,
-    },
-    ignoreReturnCode: true,
-  };
-  const args = buildArguments(options);
-  const exitCode = await exec.exec('ktlint', args, execOptions);
-  core.endGroup();
-
-  if (exitCode !== 0) {
-    throw new Error(`ktlint exited with code ${exitCode}`);
-  }
-}
-
-export {lint, buildArguments};
+export {buildArguments};

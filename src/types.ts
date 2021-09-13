@@ -14,7 +14,8 @@ interface Options {
 
 interface Input extends Options {
   version: string;
-  annotations: boolean;
+  annotate: boolean;
+  warn: boolean;
 }
 
 export {Options, Input};
