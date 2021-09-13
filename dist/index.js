@@ -359,7 +359,7 @@ const tc = __importStar(__nccwpck_require__(7784));
 const core = __importStar(__nccwpck_require__(2186));
 const KTLINT_GITHUB_VERSION = '1.0.0';
 function buildDownloadUrl(version) {
-    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.ja`;
+    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.jar`;
 }
 function getOrDownload(version) {
     return __awaiter(this, void 0, void 0, function* () {
