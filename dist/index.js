@@ -199,10 +199,11 @@ function lint(args) {
         return exitCode;
     });
 }
-function createReporter(path, warn) {
+function createReporter(tool, warn) {
     return __awaiter(this, void 0, void 0, function* () {
-        const args = warn ? '?warning' : '';
-        return `--reporter="github-workflow${args},artifact=${path}`;
+        const { path } = tool;
+        const args = warn ? '?warn' : '';
+        return `github${args},artifact=${path}`;
     });
 }
 function run() {
@@ -210,9 +211,9 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const { version, warn, annotate } = input_1.default;
         yield (0, setup_linter_1.install)(version);
-        const reporterPath = annotate ? yield (0, setup_reporter_1.install)() : null;
-        const reporter = reporterPath
-            ? yield createReporter(reporterPath, warn)
+        const reporterTool = annotate ? yield (0, setup_reporter_1.install)() : null;
+        const reporter = reporterTool
+            ? yield createReporter(reporterTool, true)
             : null;
         const options = Object.assign(Object.assign({}, input_1.default), (reporter && {
             reporter: [...((_a = input_1.default.reporter) !== null && _a !== void 0 ? _a : []), reporter],
@@ -356,27 +357,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
 const tc = __importStar(__nccwpck_require__(7784));
-const core = __importStar(__nccwpck_require__(2186));
-const KTLINT_GITHUB_VERSION = '1.0.0';
+const path = __importStar(__nccwpck_require__(5622));
+const TOOL_VERSION = '1.0.0';
+const TOOL_NAME = 'ktlint-github-reporter';
+const TOOL_FILENAME = `${TOOL_NAME}.jar`;
+function createTool(directory, version) {
+    return {
+        name: TOOL_NAME,
+        filename: TOOL_FILENAME,
+        version,
+        directory,
+        path: path.join(directory, TOOL_FILENAME),
+    };
+}
 function buildDownloadUrl(version) {
-    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.jar`;
+    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/${TOOL_FILENAME}`;
 }
 function getOrDownload(version) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cachedPath = tc.find('ktlint-github-reporter.jar', version);
+        const cachedPath = tc.find(TOOL_NAME, version);
         if (cachedPath) {
-            return cachedPath;
+            return createTool(cachedPath, version);
         }
         const downloadUrl = buildDownloadUrl(version);
         const downloadedFile = yield tc.downloadTool(downloadUrl);
-        return yield tc.cacheFile(downloadedFile, 'ktlint-github-reporter.jar', 'ktlint-github-reporter', version);
+        const path = yield tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
+        return createTool(path, version);
     });
 }
 function install() {
     return __awaiter(this, void 0, void 0, function* () {
-        const toolPath = yield getOrDownload(KTLINT_GITHUB_VERSION);
-        core.addPath(toolPath);
-        return toolPath;
+        return yield getOrDownload(TOOL_VERSION);
     });
 }
 exports.install = install;
