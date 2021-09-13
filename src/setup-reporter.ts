@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 const KTLINT_GITHUB_VERSION = '1.0.0';
 
 function buildDownloadUrl(version: string): string {
-  return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.ja`;
+  return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/ktlint-github-reporter.jar`;
 }
 
 async function getOrDownload(version: string): Promise<string> {
