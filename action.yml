@@ -6,9 +6,12 @@ inputs:
   version:
     required: false
     description: 'Version of ktlint, e.g. "0.42.1"'
-  annotations:
+  annotate:
     required: false
     description: 'Enables or disables annotations'
+  warn:
+    required: false
+    description: 'Use warning istead of error for reporting'
 
   # ktlint
   android:

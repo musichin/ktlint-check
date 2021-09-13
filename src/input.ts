@@ -2,7 +2,8 @@ import {getBooleanInput, getInput} from '@actions/core';
 import {Input} from './types';
 
 const VERSION_DEFAUL = '0.42.1';
-const ANNOTATIONS_DEFAULT = true;
+const ANNOTATE_DEFAULT = true;
+const WARN_DEFAULT = false;
 
 function getBoolean(name: string): boolean | undefined {
   try {
@@ -68,12 +69,15 @@ const editorconfig = getString('editorconfig');
 const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
 const patterns = getList('patterns');
+
 const version = getString('version') ?? VERSION_DEFAUL;
-const annotations = getBoolean('annotations') ?? ANNOTATIONS_DEFAULT;
+const annotate = getBoolean('annotate') ?? ANNOTATE_DEFAULT;
+const warn = getBoolean('warn') ?? WARN_DEFAULT;
 
 const input: Input = {
   version,
-  annotations,
+  annotate,
+  warn,
 
   android,
   disabledRules,

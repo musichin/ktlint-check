@@ -17,6 +17,16 @@
         "quotes": [1, "single"],
         "indent": [2, 2, {"SwitchCase": 1}],
         "max-len": ["error", { "code": 120 }],
-        "require-jsdoc" : 0
+        "require-jsdoc" : 0,
+        "operator-linebreak": [
+            "error",
+            "after",
+            {
+              "overrides": {
+                "?": "before",
+                ":": "before"
+              }
+            }
+          ]
     }
 }
