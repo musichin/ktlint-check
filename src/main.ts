@@ -4,7 +4,7 @@ import input from './input';
 import {install as installLinter} from './setup-linter';
 import {install as installReporter} from './setup-reporter';
 import {buildArguments} from './linting';
-import {Options} from './types';
+import {Options, Tool} from './types';
 
 async function lint(args: string[]): Promise<number> {
   core.startGroup('ktlint check');
@@ -17,18 +17,19 @@ async function lint(args: string[]): Promise<number> {
   return exitCode;
 }
 
-async function createReporter(path: string, warn: boolean): Promise<string> {
-  const args = warn ? '?warning' : '';
-  return `--reporter="github-workflow${args},artifact=${path}`;
+async function createReporter(tool: Tool, warn: boolean): Promise<string> {
+  const {path} = tool;
+  const args = warn ? '?warn' : '';
+  return `github${args},artifact=${path}`;
 }
 
 async function run() {
   const {version, warn, annotate} = input;
 
   await installLinter(version);
-  const reporterPath = annotate ? await installReporter() : null;
-  const reporter = reporterPath
-    ? await createReporter(reporterPath, warn)
+  const reporterTool = annotate ? await installReporter() : null;
+  const reporter = reporterTool
+    ? await createReporter(reporterTool, true)
     : null;
   const options: Options = {
     ...input,

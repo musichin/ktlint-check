@@ -18,4 +18,27 @@ interface Input extends Options {
   warn: boolean;
 }
 
-export {Options, Input};
+interface Tool {
+  /**
+   * Name of the tool.
+   */
+  name: string;
+  /**
+   * Version of the tool.
+   */
+  version: string;
+  /**
+   * Installation directory
+   */
+  directory: string;
+  /**
+   * Filename (simple) of the tool.
+   */
+  filename: string;
+  /**
+   * Complete path to the tool (directory + filename)
+   */
+  path: string;
+}
+
+export {Options, Input, Tool};
