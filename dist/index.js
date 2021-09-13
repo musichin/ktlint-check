@@ -271,6 +271,17 @@ const gh = __importStar(__nccwpck_require__(5438));
 const fs = __importStar(__nccwpck_require__(5747));
 const path = __importStar(__nccwpck_require__(5622));
 const http_client_1 = __nccwpck_require__(9925);
+const TOOL_NAME = 'ktlint';
+const TOOL_FILENAME = TOOL_NAME;
+function createTool(directory, version) {
+    return {
+        name: TOOL_NAME,
+        filename: TOOL_FILENAME,
+        version,
+        directory,
+        path: path.join(directory, TOOL_FILENAME),
+    };
+}
 function buildDownloadUrl(version) {
     return `https://github.com/pinterest/ktlint/releases/download/${version}/ktlint`;
 }
@@ -297,23 +308,23 @@ function determineVersion(version) {
 }
 function getOrDownload(version) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cachedPath = tc.find('ktlint', version);
+        const cachedPath = tc.find(TOOL_NAME, version);
         if (cachedPath) {
-            return cachedPath;
+            return createTool(cachedPath, version);
         }
         const downloadUrl = buildDownloadUrl(version);
         const downloadedFile = yield tc.downloadTool(downloadUrl);
-        return yield tc.cacheFile(downloadedFile, 'ktlint', 'ktlint', version);
+        const path = yield tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
+        return createTool(path, version);
     });
 }
 function install(version) {
     return __awaiter(this, void 0, void 0, function* () {
         const finalVersion = yield determineVersion(version);
-        const toolPath = yield getOrDownload(finalVersion);
-        const execPath = path.join(toolPath, 'ktlint');
-        fs.chmodSync(execPath, '777');
-        core.addPath(toolPath);
-        return toolPath;
+        const tool = yield getOrDownload(finalVersion);
+        fs.chmodSync(tool.path, '777');
+        core.addPath(tool.directory);
+        return tool;
     });
 }
 exports.install = install;

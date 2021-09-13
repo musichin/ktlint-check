@@ -4,9 +4,23 @@ import * as gh from '@actions/github';
 import * as fs from 'fs';
 import * as path from 'path';
 import {HttpClient} from '@actions/http-client';
+import {Tool} from './types';
+
+const TOOL_NAME = 'ktlint';
+const TOOL_FILENAME = TOOL_NAME;
 
 interface Release {
   tag_name: string; // eslint-disable-line camelcase
+}
+
+function createTool(directory: string, version: string): Tool {
+  return {
+    name: TOOL_NAME,
+    filename: TOOL_FILENAME,
+    version,
+    directory,
+    path: path.join(directory, TOOL_FILENAME),
+  };
 }
 
 function buildDownloadUrl(version: string): string {
@@ -38,24 +52,29 @@ async function determineVersion(version: string): Promise<string> {
   return version;
 }
 
-async function getOrDownload(version: string): Promise<string> {
-  const cachedPath = tc.find('ktlint', version);
+async function getOrDownload(version: string): Promise<Tool> {
+  const cachedPath = tc.find(TOOL_NAME, version);
   if (cachedPath) {
-    return cachedPath;
+    return createTool(cachedPath, version);
   }
 
   const downloadUrl = buildDownloadUrl(version);
   const downloadedFile = await tc.downloadTool(downloadUrl);
-  return await tc.cacheFile(downloadedFile, 'ktlint', 'ktlint', version);
+  const path = await tc.cacheFile(
+    downloadedFile,
+    TOOL_FILENAME,
+    TOOL_NAME,
+    version,
+  );
+  return createTool(path, version);
 }
 
-async function install(version: string): Promise<string> {
+async function install(version: string): Promise<Tool> {
   const finalVersion = await determineVersion(version);
-  const toolPath = await getOrDownload(finalVersion);
-  const execPath = path.join(toolPath, 'ktlint');
-  fs.chmodSync(execPath, '777');
-  core.addPath(toolPath);
-  return toolPath;
+  const tool = await getOrDownload(finalVersion);
+  fs.chmodSync(tool.path, '777');
+  core.addPath(tool.directory);
+  return tool;
 }
 
 export {getLatestVersion, install};
