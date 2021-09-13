@@ -1,0 +1,1 @@
+data clas TestClass(val a:String)

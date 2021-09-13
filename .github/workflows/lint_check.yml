@@ -1,0 +1,17 @@
+name: Lint Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: musichin/ktlint-check@v1
+        with:
+          warn: true
+          relative: true
