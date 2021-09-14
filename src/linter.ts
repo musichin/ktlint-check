@@ -61,7 +61,7 @@ function buildArguments(options?: Options): string[] {
   }
 
   if (patterns !== undefined) {
-    patterns.forEach(args.push);
+    patterns.forEach((pattern) => args.push(pattern));
   }
 
   return args;
