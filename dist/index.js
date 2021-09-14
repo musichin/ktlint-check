@@ -92,7 +92,7 @@ module.exports = input;
 
 /***/ }),
 
-/***/ 1838:
+/***/ 8237:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -136,7 +136,7 @@ function buildArguments(options) {
         args.push(`--baseline=${baseline}`);
     }
     if (patterns !== undefined) {
-        patterns.forEach(args.push);
+        patterns.forEach((pattern) => args.push(pattern));
     }
     return args;
 }
@@ -187,7 +187,7 @@ const exec_1 = __nccwpck_require__(1514);
 const input_1 = __importDefault(__nccwpck_require__(8657));
 const setup_linter_1 = __nccwpck_require__(7231);
 const setup_reporter_1 = __nccwpck_require__(5795);
-const linting_1 = __nccwpck_require__(1838);
+const linter_1 = __nccwpck_require__(8237);
 function lint(args) {
     return __awaiter(this, void 0, void 0, function* () {
         core.startGroup('ktlint check');
@@ -206,26 +206,26 @@ function createReporter(tool, warn) {
         return `github${args},artifact=${path}`;
     });
 }
-function run() {
+function check(input) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const { version, warn, annotate } = input_1.default;
+        const { version, warn, annotate } = input;
         yield (0, setup_linter_1.install)(version);
         const reporterTool = annotate ? yield (0, setup_reporter_1.install)() : null;
         const reporter = reporterTool
             ? yield createReporter(reporterTool, warn)
             : null;
-        const options = Object.assign(Object.assign({}, input_1.default), (reporter && {
-            reporter: [...((_a = input_1.default.reporter) !== null && _a !== void 0 ? _a : []), reporter],
+        const options = Object.assign(Object.assign({}, input), (reporter && {
+            reporter: [...((_a = input.reporter) !== null && _a !== void 0 ? _a : []), reporter],
         }));
-        const args = (0, linting_1.buildArguments)(options);
+        const args = (0, linter_1.buildArguments)(options);
         const exitCode = yield lint(args);
         if (exitCode !== 0 && !warn) {
             throw new Error(`ktlint exited with code ${exitCode}`);
         }
     });
 }
-run().catch(core.setFailed);
+check(input_1.default).catch(core.setFailed);
 
 
 /***/ }),

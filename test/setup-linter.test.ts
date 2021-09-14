@@ -1,7 +1,7 @@
 import {expect, it, describe} from '@jest/globals';
 import {install, getLatestVersion} from '../src/setup-linter';
 
-describe('#setup', () => {
+describe('#setup-linter', () => {
   describe('#getLatestVersion', () => {
     it('successfully', async () => {
       const downloadUrl = await getLatestVersion();
@@ -11,8 +11,9 @@ describe('#setup', () => {
 
   describe('#install', () => {
     it('specific version', async () => {
-      const path = await install('0.42.1');
-      expect(path).toBeTruthy();
+      const tool = await install('0.42.1');
+      expect(tool).toBeTruthy();
+      expect(tool.name).toStrictEqual('ktlint');
     }, 60_000);
   });
 });

@@ -3,8 +3,8 @@ import {exec} from '@actions/exec';
 import input from './input';
 import {install as installLinter} from './setup-linter';
 import {install as installReporter} from './setup-reporter';
-import {buildArguments} from './linting';
-import {Options, Tool} from './types';
+import {buildArguments} from './linter';
+import {Input, Options, Tool} from './types';
 
 async function lint(args: string[]): Promise<number> {
   core.startGroup('ktlint check');
@@ -23,7 +23,7 @@ async function createReporter(tool: Tool, warn: boolean): Promise<string> {
   return `github${args},artifact=${path}`;
 }
 
-async function run() {
+async function check(input: Input) {
   const {version, warn, annotate} = input;
 
   await installLinter(version);
@@ -46,4 +46,4 @@ async function run() {
   }
 }
 
-run().catch(core.setFailed);
+check(input).catch(core.setFailed);
