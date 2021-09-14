@@ -58,12 +58,14 @@ function getNumber(name) {
     return num;
 }
 const android = getBoolean('android');
+const debug = getBoolean('debug');
 const disabledRules = getList('disabled_rules');
 const format = getBoolean('format');
 const limit = getNumber('limit');
 const relative = getBoolean('relative');
 const reporter = getList('reporter');
 const ruleset = getString('ruleset');
+const verbose = getBoolean('verbose');
 const editorconfig = getString('editorconfig');
 const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
@@ -76,12 +78,14 @@ const input = {
     annotate,
     warn,
     android,
+    debug,
     disabledRules,
     format,
     limit,
     relative,
     reporter,
     ruleset,
+    verbose,
     editorconfig,
     experimental,
     baseline,
@@ -104,9 +108,12 @@ function buildArguments(options) {
     if (options === undefined) {
         return [];
     }
-    const { android, disabledRules, format, limit, relative, reporter, ruleset, editorconfig, experimental, baseline, patterns, } = options;
+    const { android, debug, disabledRules, format, limit, relative, reporter, ruleset, verbose, editorconfig, experimental, baseline, patterns, } = options;
     if (android === true) {
         args.push('--android');
+    }
+    if (debug === true) {
+        args.push('--debug');
     }
     if (disabledRules != undefined && disabledRules.length > 0) {
         args.push(`--disabled_rules=${disabledRules.join(',')}`);
@@ -125,6 +132,9 @@ function buildArguments(options) {
     }
     if (ruleset !== undefined) {
         args.push(`--ruleset=${ruleset}`);
+    }
+    if (verbose === true) {
+        args.push('--verbose');
     }
     if (editorconfig !== undefined) {
         args.push(`--editorconfig=${editorconfig}`);

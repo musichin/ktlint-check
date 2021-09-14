@@ -1,11 +1,13 @@
 interface Options {
   android?: boolean;
+  debug?: boolean;
   disabledRules?: string[];
   format?: boolean;
   limit?: number;
   relative?: boolean;
   reporter?: string[];
   ruleset?: string;
+  verbose?: boolean;
   editorconfig?: string;
   experimental?: boolean;
   baseline?: string;

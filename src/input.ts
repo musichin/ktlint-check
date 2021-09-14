@@ -59,12 +59,14 @@ function getNumber(name: string): number | undefined {
 }
 
 const android = getBoolean('android');
+const debug = getBoolean('debug');
 const disabledRules = getList('disabled_rules');
 const format = getBoolean('format');
 const limit = getNumber('limit');
 const relative = getBoolean('relative');
 const reporter = getList('reporter');
 const ruleset = getString('ruleset');
+const verbose = getBoolean('verbose');
 const editorconfig = getString('editorconfig');
 const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
@@ -80,12 +82,14 @@ const input: Input = {
   warn,
 
   android,
+  debug,
   disabledRules,
   format,
   limit,
   relative,
   reporter,
   ruleset,
+  verbose,
   editorconfig,
   experimental,
   baseline,
