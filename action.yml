@@ -1,5 +1,5 @@
 
-name: 'Run ktlint'
+name: 'ktlint-check'
 description: 'Run ktlint to check your code and annotate pull requests with errors'
 author: 'Anton Musichin'
 branding:
