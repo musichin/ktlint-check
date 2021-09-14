@@ -12,12 +12,14 @@ describe('#linter', () => {
     it('all arguments', () => {
       const options: Options = {
         android: true,
+        debug: true,
         disabledRules: ['testRule'],
         format: true,
         limit: 10,
         relative: true,
         reporter: ['testReporter'],
         ruleset: 'testRuleset',
+        verbose: true,
         editorconfig: 'testEditorconfig',
         experimental: true,
         baseline: 'testBaseline',
@@ -26,17 +28,19 @@ describe('#linter', () => {
       const args = buildArguments(options);
 
       expect(args).toContain('--android');
+      expect(args).toContain('--verbose');
       expect(args).toContain('--disabled_rules=testRule');
       expect(args).toContain('--format');
       expect(args).toContain('--limit=10');
       expect(args).toContain('--relative');
       expect(args).toContain('--reporter=testReporter');
       expect(args).toContain('--ruleset=testRuleset');
+      expect(args).toContain('--debug');
       expect(args).toContain('--editorconfig=testEditorconfig');
       expect(args).toContain('--experimental');
       expect(args).toContain('--baseline=testBaseline');
       expect(args).toContain('testPattern');
-      expect(args.length).toStrictEqual(11);
+      expect(args.length).toStrictEqual(13);
     });
   });
 });

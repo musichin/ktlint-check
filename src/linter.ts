@@ -8,12 +8,14 @@ function buildArguments(options?: Options): string[] {
 
   const {
     android,
+    debug,
     disabledRules,
     format,
     limit,
     relative,
     reporter,
     ruleset,
+    verbose,
     editorconfig,
     experimental,
     baseline,
@@ -22,6 +24,10 @@ function buildArguments(options?: Options): string[] {
 
   if (android === true) {
     args.push('--android');
+  }
+
+  if (debug === true) {
+    args.push('--debug');
   }
 
   if (disabledRules != undefined && disabledRules.length > 0) {
@@ -46,6 +52,10 @@ function buildArguments(options?: Options): string[] {
 
   if (ruleset !== undefined) {
     args.push(`--ruleset=${ruleset}`);
+  }
+
+  if (verbose === true) {
+    args.push('--verbose');
   }
 
   if (editorconfig !== undefined) {

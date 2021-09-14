@@ -8,13 +8,15 @@ inputs:
     description: 'Version of ktlint, e.g. "0.42.1"'
   annotate:
     required: false
-    description: 'Enables or disables annotations'
+    description: 'Enables annotation reporting'
   warn:
     required: false
-    description: 'Use warning istead of error for reporting'
+    description: 'Report lint errors as warnings'
 
-  # ktlint
+  # use "ktlint --help" for more information
   android:
+    required: false
+  debug:
     required: false
   disabledRules:
     required: false
@@ -36,6 +38,8 @@ inputs:
     required: false
   patterns:
     required: false
+  verbose:
+   required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
