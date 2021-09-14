@@ -2,8 +2,9 @@
 name: 'ktlint check'
 description: 'Runs ktlint check'
 author: 'Anton Musichin'
-icon: 'check'
-color: 'orange'
+branding:
+  icon: 'check'
+  color: 'orange'
 inputs:
   version:
     required: false
