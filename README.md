@@ -11,8 +11,29 @@ steps:
     with:
       version: '0.42.1'
 ```
-
 The ktlint `version` input is optional, however, it is strongly recommended to always specify it.
+
+**Advanced**
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  - run: musichin/ktlint-check@v1
+    with:
+      version: '0.42.1'
+      warn: true # warn only
+
+      # ktlint
+      android: true
+      relative: true
+      experimental: true
+      reporter: |
+        plain,output=ktlint_report.txt
+        json,output=ktlint_report.json
+      patterns: |
+        **/**.kt
+        !**/generated/**
+```
+All relevant ktlint arguments are supported, check `ktlint --help` for more information.
 
 ## Example
 ![](example.jpg)
