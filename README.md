@@ -7,7 +7,7 @@ See [action.yml](action.yml)
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - run: musichin/ktlint-check@v1
+  - uses: musichin/ktlint-check@v1
     with:
       version: '0.42.1'
 ```
@@ -17,7 +17,7 @@ The ktlint `version` input is optional, however, it is strongly recommended to a
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - run: musichin/ktlint-check@v1
+  - uses: musichin/ktlint-check@v1
     with:
       version: '0.42.1'
       warn: true # warn only
