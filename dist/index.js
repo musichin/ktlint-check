@@ -179,15 +179,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -198,42 +189,39 @@ const input_1 = __importDefault(__nccwpck_require__(8657));
 const setup_linter_1 = __nccwpck_require__(7231);
 const setup_reporter_1 = __nccwpck_require__(5795);
 const linter_1 = __nccwpck_require__(8237);
-function lint(args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.startGroup('ktlint check');
-        const execOptions = {
-            ignoreReturnCode: true,
-        };
-        const exitCode = yield (0, exec_1.exec)('ktlint', args, execOptions);
-        core.endGroup();
-        return exitCode;
-    });
+async function lint(args) {
+    core.startGroup('ktlint check');
+    const execOptions = {
+        ignoreReturnCode: true,
+    };
+    const exitCode = await (0, exec_1.exec)('ktlint', args, execOptions);
+    core.endGroup();
+    return exitCode;
 }
-function createReporter(tool, warn) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { path } = tool;
-        const args = warn ? '?warn' : '';
-        return `github${args},artifact=${path}`;
-    });
+async function createReporter(tool, warn) {
+    const { path } = tool;
+    const args = warn ? '?warn' : '';
+    return `github${args},artifact=${path}`;
 }
-function check(input) {
+async function check(input) {
     var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const { version, warn, annotate } = input;
-        yield (0, setup_linter_1.install)(version);
-        const reporterTool = annotate ? yield (0, setup_reporter_1.install)() : null;
-        const reporter = reporterTool
-            ? yield createReporter(reporterTool, warn)
-            : null;
-        const options = Object.assign(Object.assign({}, input), (reporter && {
+    const { version, warn, annotate } = input;
+    await (0, setup_linter_1.install)(version);
+    const reporterTool = annotate ? await (0, setup_reporter_1.install)() : null;
+    const reporter = reporterTool
+        ? await createReporter(reporterTool, warn)
+        : null;
+    const options = {
+        ...input,
+        ...(reporter && {
             reporter: [...((_a = input.reporter) !== null && _a !== void 0 ? _a : []), reporter],
-        }));
-        const args = (0, linter_1.buildArguments)(options);
-        const exitCode = yield lint(args);
-        if (exitCode !== 0 && !warn) {
-            throw new Error(`ktlint exited with code ${exitCode}`);
-        }
-    });
+        }),
+    };
+    const args = (0, linter_1.buildArguments)(options);
+    const exitCode = await lint(args);
+    if (exitCode !== 0 && !warn) {
+        throw new Error(`ktlint exited with code ${exitCode}`);
+    }
 }
 check(input_1.default).catch(core.setFailed);
 
@@ -264,15 +252,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = exports.getLatestVersion = void 0;
 const tc = __importStar(__nccwpck_require__(7784));
@@ -295,47 +274,39 @@ function createTool(directory, version) {
 function buildDownloadUrl(version) {
     return `https://github.com/pinterest/ktlint/releases/download/${version}/ktlint`;
 }
-function getLatestVersion() {
+async function getLatestVersion() {
     var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const httpClient = new http_client_1.HttpClient('ktlint-check');
-        const response = yield httpClient.getJson('https://api.github.com/repos/pinterest/ktlint/releases/latest');
-        const downloadUrl = (_a = response === null || response === void 0 ? void 0 : response.result) === null || _a === void 0 ? void 0 : _a.tag_name;
-        if (downloadUrl === undefined) {
-            throw new Error(`Could not determine latest version: ${response.statusCode}`);
-        }
-        return downloadUrl;
-    });
+    const httpClient = new http_client_1.HttpClient('ktlint-check');
+    const response = await httpClient.getJson('https://api.github.com/repos/pinterest/ktlint/releases/latest');
+    const downloadUrl = (_a = response === null || response === void 0 ? void 0 : response.result) === null || _a === void 0 ? void 0 : _a.tag_name;
+    if (downloadUrl === undefined) {
+        throw new Error(`Could not determine latest version: ${response.statusCode}`);
+    }
+    return downloadUrl;
 }
 exports.getLatestVersion = getLatestVersion;
-function determineVersion(version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (version === 'latest' && gh.context.repo.owner === 'musichin') {
-            return yield getLatestVersion();
-        }
-        return version;
-    });
+async function determineVersion(version) {
+    if (version === 'latest' && gh.context.repo.owner === 'musichin') {
+        return await getLatestVersion();
+    }
+    return version;
 }
-function getOrDownload(version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cachedPath = tc.find(TOOL_NAME, version);
-        if (cachedPath) {
-            return createTool(cachedPath, version);
-        }
-        const downloadUrl = buildDownloadUrl(version);
-        const downloadedFile = yield tc.downloadTool(downloadUrl);
-        const path = yield tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
-        return createTool(path, version);
-    });
+async function getOrDownload(version) {
+    const cachedPath = tc.find(TOOL_NAME, version);
+    if (cachedPath) {
+        return createTool(cachedPath, version);
+    }
+    const downloadUrl = buildDownloadUrl(version);
+    const downloadedFile = await tc.downloadTool(downloadUrl);
+    const path = await tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
+    return createTool(path, version);
 }
-function install(version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const finalVersion = yield determineVersion(version);
-        const tool = yield getOrDownload(finalVersion);
-        fs.chmodSync(tool.path, '777');
-        core.addPath(tool.directory);
-        return tool;
-    });
+async function install(version) {
+    const finalVersion = await determineVersion(version);
+    const tool = await getOrDownload(finalVersion);
+    fs.chmodSync(tool.path, '777');
+    core.addPath(tool.directory);
+    return tool;
 }
 exports.install = install;
 
@@ -366,15 +337,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
 const tc = __importStar(__nccwpck_require__(7784));
@@ -394,22 +356,18 @@ function createTool(directory, version) {
 function buildDownloadUrl(version) {
     return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/${TOOL_FILENAME}`;
 }
-function getOrDownload(version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cachedPath = tc.find(TOOL_NAME, version);
-        if (cachedPath) {
-            return createTool(cachedPath, version);
-        }
-        const downloadUrl = buildDownloadUrl(version);
-        const downloadedFile = yield tc.downloadTool(downloadUrl);
-        const path = yield tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
-        return createTool(path, version);
-    });
+async function getOrDownload(version) {
+    const cachedPath = tc.find(TOOL_NAME, version);
+    if (cachedPath) {
+        return createTool(cachedPath, version);
+    }
+    const downloadUrl = buildDownloadUrl(version);
+    const downloadedFile = await tc.downloadTool(downloadUrl);
+    const path = await tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
+    return createTool(path, version);
 }
-function install() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield getOrDownload(TOOL_VERSION);
-    });
+async function install() {
+    return await getOrDownload(TOOL_VERSION);
 }
 exports.install = install;
 
