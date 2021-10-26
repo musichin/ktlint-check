@@ -30,7 +30,7 @@
     "@actions/tool-cache": "^1.7.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.0.0",
+    "@typescript-eslint/eslint-plugin": "5.2.0",
     "@typescript-eslint/parser": "5.0.0",
     "@vercel/ncc": "0.31.1",
     "eslint": "8.0.0",
