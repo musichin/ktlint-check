@@ -1,4 +1,6 @@
 # ktlint-check
+[![CI](https://github.com/musichin/ktlint-check/actions/workflows/ci.yml/badge.svg)](https://github.com/musichin/ktlint-check/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/musichin/ktlint-check/branch/main/graph/badge.svg?token=W2AT4FOVAH)](https://codecov.io/gh/musichin/ktlint-check)
 
 ## Usage:
 See [action.yml](action.yml)
