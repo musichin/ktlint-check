@@ -92,7 +92,7 @@ const input = {
     patterns,
 };
 module.exports = input;
-
+//# sourceMappingURL=input.js.map
 
 /***/ }),
 
@@ -151,7 +151,7 @@ function buildArguments(options) {
     return args;
 }
 exports.buildArguments = buildArguments;
-
+//# sourceMappingURL=linter.js.map
 
 /***/ }),
 
@@ -224,7 +224,7 @@ async function check(input) {
     }
 }
 check(input_1.default).catch(core.setFailed);
-
+//# sourceMappingURL=main.js.map
 
 /***/ }),
 
@@ -309,7 +309,7 @@ async function install(version) {
     return tool;
 }
 exports.install = install;
-
+//# sourceMappingURL=setup-linter.js.map
 
 /***/ }),
 
@@ -370,7 +370,7 @@ async function install() {
     return await getOrDownload(TOOL_VERSION);
 }
 exports.install = install;
-
+//# sourceMappingURL=setup-reporter.js.map
 
 /***/ }),
 
