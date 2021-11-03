@@ -11,7 +11,7 @@ steps:
   - uses: actions/checkout@v2
   - uses: musichin/ktlint-check@v1
     with:
-      version: '0.42.1'
+      version: '0.43.0'
 ```
 The ktlint `version` input is optional, however, it is strongly recommended to always specify it.
 
@@ -21,7 +21,7 @@ steps:
   - uses: actions/checkout@v2
   - uses: musichin/ktlint-check@v1
     with:
-      version: '0.42.1'
+      version: '0.43.0'
       warn: true # warn only
 
       # ktlint
