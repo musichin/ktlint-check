@@ -2,7 +2,7 @@ import * as tc from '@actions/tool-cache';
 import {Tool} from './types';
 import * as path from 'path';
 
-const TOOL_VERSION = '1.0.0';
+const TOOL_VERSION = '1.1.0';
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;
 
