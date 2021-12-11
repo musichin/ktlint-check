@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 var _a, _b, _c;
 const core_1 = __nccwpck_require__(2186);
-const VERSION_DEFAUL = '0.43.0';
+const VERSION_DEFAUL = '0.43.2';
 const ANNOTATE_DEFAULT = true;
 const WARN_DEFAULT = false;
 function getBoolean(name) {

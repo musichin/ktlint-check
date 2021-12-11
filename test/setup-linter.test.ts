@@ -11,7 +11,7 @@ describe('#setup-linter', () => {
 
   describe('#install', () => {
     it('specific version', async () => {
-      const tool = await install('0.43.0');
+      const tool = await install('0.43.2');
       expect(tool).toBeTruthy();
       expect(tool.name).toStrictEqual('ktlint');
     }, 60_000);
