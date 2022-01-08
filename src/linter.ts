@@ -1,9 +1,9 @@
 import {Options} from './types';
 
 function buildArguments(options?: Options): string[] {
-  const args = [];
+  const args: string[] = [];
   if (options === undefined) {
-    return [];
+    return args;
   }
 
   const {

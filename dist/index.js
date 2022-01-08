@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 var _a, _b, _c;
 const core_1 = __nccwpck_require__(186);
-const VERSION_DEFAUL = '0.43.2';
+const VERSION_DEFAULT = '0.43.2';
 const ANNOTATE_DEFAULT = true;
 const WARN_DEFAULT = false;
 function getBoolean(name) {
@@ -70,7 +70,7 @@ const editorconfig = getString('editorconfig');
 const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
 const patterns = getList('patterns');
-const version = (_a = getString('version')) !== null && _a !== void 0 ? _a : VERSION_DEFAUL;
+const version = (_a = getString('version')) !== null && _a !== void 0 ? _a : VERSION_DEFAULT;
 const annotate = (_b = getBoolean('annotate')) !== null && _b !== void 0 ? _b : ANNOTATE_DEFAULT;
 const warn = (_c = getBoolean('warn')) !== null && _c !== void 0 ? _c : WARN_DEFAULT;
 const input = {
@@ -106,7 +106,7 @@ exports.buildArguments = void 0;
 function buildArguments(options) {
     const args = [];
     if (options === undefined) {
-        return [];
+        return args;
     }
     const { android, debug, disabledRules, format, limit, relative, reporter, ruleset, verbose, editorconfig, experimental, baseline, patterns, } = options;
     if (android === true) {
