@@ -254,23 +254,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = exports.getLatestVersion = void 0;
-const tc = __importStar(__nccwpck_require__(7784));
 const core = __importStar(__nccwpck_require__(2186));
 const gh = __importStar(__nccwpck_require__(5438));
 const fs = __importStar(__nccwpck_require__(7147));
-const path = __importStar(__nccwpck_require__(1017));
 const http_client_1 = __nccwpck_require__(9925);
+const tool_provisioner_1 = __nccwpck_require__(5295);
 const TOOL_NAME = 'ktlint';
 const TOOL_FILENAME = TOOL_NAME;
-function createTool(directory, version) {
-    return {
-        name: TOOL_NAME,
-        filename: TOOL_FILENAME,
-        version,
-        directory,
-        path: path.join(directory, TOOL_FILENAME),
-    };
-}
 function buildDownloadUrl(version) {
     return `https://github.com/pinterest/ktlint/releases/download/${version}/ktlint`;
 }
@@ -291,19 +281,12 @@ async function determineVersion(version) {
     }
     return version;
 }
-async function getOrDownload(version) {
-    const cachedPath = tc.find(TOOL_NAME, version);
-    if (cachedPath) {
-        return createTool(cachedPath, version);
-    }
-    const downloadUrl = buildDownloadUrl(version);
-    const downloadedFile = await tc.downloadTool(downloadUrl);
-    const path = await tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
-    return createTool(path, version);
+async function provision(version) {
+    return (0, tool_provisioner_1.getOrDownload)(TOOL_NAME, version, buildDownloadUrl(version), TOOL_FILENAME);
 }
 async function install(version) {
     const finalVersion = await determineVersion(version);
-    const tool = await getOrDownload(finalVersion);
+    const tool = await provision(finalVersion);
     fs.chmodSync(tool.path, '777');
     core.addPath(tool.directory);
     return tool;
@@ -314,6 +297,31 @@ exports.install = install;
 /***/ }),
 
 /***/ 5795:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.install = void 0;
+const tool_provisioner_1 = __nccwpck_require__(5295);
+const TOOL_VERSION = '1.1.0';
+const TOOL_NAME = 'ktlint-github-reporter';
+const TOOL_FILENAME = `${TOOL_NAME}.jar`;
+function buildDownloadUrl(version) {
+    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/${TOOL_FILENAME}`;
+}
+async function provision(version) {
+    return (0, tool_provisioner_1.getOrDownload)(TOOL_NAME, version, buildDownloadUrl(version), TOOL_FILENAME);
+}
+async function install() {
+    return await provision(TOOL_VERSION);
+}
+exports.install = install;
+//# sourceMappingURL=setup-reporter.js.map
+
+/***/ }),
+
+/***/ 5295:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -338,39 +346,28 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.install = void 0;
-const tc = __importStar(__nccwpck_require__(7784));
+exports.getOrDownload = void 0;
 const path = __importStar(__nccwpck_require__(1017));
-const TOOL_VERSION = '1.1.0';
-const TOOL_NAME = 'ktlint-github-reporter';
-const TOOL_FILENAME = `${TOOL_NAME}.jar`;
-function createTool(directory, version) {
+const tc = __importStar(__nccwpck_require__(7784));
+function createTool(name, directory, version, fileName) {
     return {
-        name: TOOL_NAME,
-        filename: TOOL_FILENAME,
+        name: name,
+        filename: fileName,
         version,
         directory,
-        path: path.join(directory, TOOL_FILENAME),
+        path: path.join(directory, fileName),
     };
 }
-function buildDownloadUrl(version) {
-    return `https://github.com/musichin/ktlint-github-reporter/releases/download/${version}/${TOOL_FILENAME}`;
-}
-async function getOrDownload(version) {
-    const cachedPath = tc.find(TOOL_NAME, version);
-    if (cachedPath) {
-        return createTool(cachedPath, version);
+async function getOrDownload(name, version, downloadUrl, fileName) {
+    let path = tc.find(name, version);
+    if (!path) {
+        const downloadedFile = await tc.downloadTool(downloadUrl);
+        path = await tc.cacheFile(downloadedFile, fileName, name, version);
     }
-    const downloadUrl = buildDownloadUrl(version);
-    const downloadedFile = await tc.downloadTool(downloadUrl);
-    const path = await tc.cacheFile(downloadedFile, TOOL_FILENAME, TOOL_NAME, version);
-    return createTool(path, version);
+    return createTool(name, path, version, fileName);
 }
-async function install() {
-    return await getOrDownload(TOOL_VERSION);
-}
-exports.install = install;
-//# sourceMappingURL=setup-reporter.js.map
+exports.getOrDownload = getOrDownload;
+//# sourceMappingURL=tool-provisioner.js.map
 
 /***/ }),
 

@@ -4,6 +4,10 @@ import {Options} from '../src/types';
 
 describe('#linter', () => {
   describe('#buildArguments', () => {
+    it('undefined arguments', () => {
+      const args = buildArguments(undefined);
+      expect(args.length).toStrictEqual(0);
+    });
     it('empty arguments', () => {
       const options: Options = {};
       const args = buildArguments(options);
