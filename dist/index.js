@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 var _a, _b, _c;
 const core_1 = __nccwpck_require__(186);
-const VERSION_DEFAULT = '0.43.2';
+const VERSION_DEFAULT = '0.44.0';
 const ANNOTATE_DEFAULT = true;
 const WARN_DEFAULT = false;
 function getBoolean(name) {
@@ -2927,7 +2927,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports._readLinuxVersionFile = exports._getOsVersion = exports._findMatch = void 0;
-const semver = __importStar(__nccwpck_require__(562));
+const semver = __importStar(__nccwpck_require__(911));
 const core_1 = __nccwpck_require__(186);
 // needs to be require for core node modules to be mocked
 /* eslint @typescript-eslint/no-require-imports: 0 */
@@ -3162,7 +3162,7 @@ const mm = __importStar(__nccwpck_require__(473));
 const os = __importStar(__nccwpck_require__(37));
 const path = __importStar(__nccwpck_require__(17));
 const httpm = __importStar(__nccwpck_require__(925));
-const semver = __importStar(__nccwpck_require__(562));
+const semver = __importStar(__nccwpck_require__(911));
 const stream = __importStar(__nccwpck_require__(781));
 const util = __importStar(__nccwpck_require__(837));
 const v4_1 = __importDefault(__nccwpck_require__(824));
@@ -3789,7 +3789,7 @@ function _unique(values) {
 
 /***/ }),
 
-/***/ 562:
+/***/ 911:
 /***/ ((module, exports) => {
 
 exports = module.exports = SemVer

@@ -8,7 +8,7 @@ branding:
 inputs:
   version:
     required: false
-    description: 'Version of ktlint, e.g. "0.43.2"'
+    description: 'Version of ktlint, e.g. "0.44.0"'
   annotate:
     required: false
     description: 'Enables annotation reporting'
