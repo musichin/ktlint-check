@@ -1,7 +1,7 @@
 import {getBooleanInput, getInput} from '@actions/core';
 import {Input} from './types';
 
-const VERSION_DEFAULT = '0.45.0';
+const VERSION_DEFAULT = '0.45.1';
 const ANNOTATE_DEFAULT = true;
 const WARN_DEFAULT = false;
 

@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 var _a, _b, _c;
 const core_1 = __nccwpck_require__(186);
-const VERSION_DEFAULT = '0.45.0';
+const VERSION_DEFAULT = '0.45.1';
 const ANNOTATE_DEFAULT = true;
 const WARN_DEFAULT = false;
 function getBoolean(name) {
@@ -292,7 +292,7 @@ exports.install = install;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
 const tool_provisioner_1 = __nccwpck_require__(295);
-const TOOL_VERSION = '1.2.0';
+const TOOL_VERSION = '1.2.1';
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;
 function buildDownloadUrl(version) {
