@@ -9,20 +9,20 @@ See [action.yml](action.yml)
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: musichin/ktlint-check@v1
+  - uses: musichin/ktlint-check@v2
     with:
       ktlint-version: '0.46.1'
 ```
-The ktlint `version` input is optional, however, it is strongly recommended to always specify it.
+The ktlint `ktlint-version` input is optional, however, it is strongly recommended to always specify it.
 
 **Advanced**
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: musichin/ktlint-check@v1
+  - uses: musichin/ktlint-check@v2
     with:
-      version: '0.46.1'
-      warn: true # warn only
+      ktlint-version: '0.46.1'
+      level: 'warning'
 
       # ktlint
       android: true
