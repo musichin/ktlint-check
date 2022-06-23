@@ -6,15 +6,14 @@ branding:
   icon: 'check'
   color: 'orange'
 inputs:
-  version:
-    required: false
-    description: 'Version of ktlint, e.g. "0.45.2"'
-  annotate:
-    required: false
-    description: 'Enables annotation reporting'
-  warn:
-    required: false
-    description: 'Report lint errors as warnings'
+  ktlint-version:
+    required: true
+    default: '0.46.1'
+    description: 'Version of ktlint, e.g. "0.46.1".'
+  level:
+    required: true
+    default: error
+    description: 'Annotation level for lint errors. Possible values: "error", "warning", "notice", "none".'
 
   # use "ktlint --help" for more information
   android:

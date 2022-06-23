@@ -14,10 +14,11 @@ interface Options {
   patterns?: string[];
 }
 
+type Level = 'error' | 'warning' | 'notice' | 'none';
+
 interface Input extends Options {
-  version: string;
-  annotate: boolean;
-  warn: boolean;
+  ktlintVersion: string;
+  level: Level;
 }
 
 interface Tool {
@@ -43,4 +44,4 @@ interface Tool {
   path: string;
 }
 
-export {Options, Input, Tool};
+export {Options, Input, Level, Tool};
