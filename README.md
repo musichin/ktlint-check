@@ -20,6 +20,7 @@ The ktlint `ktlint-version` input is optional, however, it is strongly recommend
 steps:
   - uses: actions/checkout@v2
   - uses: musichin/ktlint-check@v2
+    continue-on-error: true
     with:
       ktlint-version: '0.46.1'
       level: 'warning'

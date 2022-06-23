@@ -6,17 +6,6 @@ import {install as installReporter} from './setup-reporter';
 import {buildArguments} from './linter';
 import {Input, Level, Options, Tool} from './types';
 
-async function lint(args: string[]): Promise<number> {
-  core.startGroup('ktlint check');
-  const execOptions = {
-    ignoreReturnCode: true,
-  };
-  const exitCode = await exec('ktlint', args, execOptions);
-  core.endGroup();
-
-  return exitCode;
-}
-
 async function createReporter(tool: Tool, level: Level): Promise<string> {
   const {path} = tool;
   return `github?level=${level},artifact=${path}`;
@@ -34,11 +23,7 @@ async function check(input: Input) {
   };
 
   const args = buildArguments(options);
-  const exitCode = await lint(args);
-
-  if (exitCode !== 0 && level === 'error') {
-    throw new Error(`ktlint exited with code ${exitCode}.`);
-  }
+  await exec('ktlint', args);
 }
 
 check(input).catch(core.setFailed);
