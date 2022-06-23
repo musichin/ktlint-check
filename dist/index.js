@@ -6,11 +6,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
-var _a, _b, _c;
 const core_1 = __nccwpck_require__(186);
-const VERSION_DEFAULT = '0.45.2';
-const ANNOTATE_DEFAULT = true;
-const WARN_DEFAULT = false;
 function getBoolean(name) {
     try {
         return (0, core_1.getBooleanInput)(name);
@@ -21,7 +17,7 @@ function getBoolean(name) {
             return undefined;
         }
         else {
-            throw new TypeError(`Value ${value} of ${name} is not a boolean`);
+            throw new TypeError(`Input "${name}" must be a boolean`);
         }
     }
 }
@@ -52,10 +48,30 @@ function getNumber(name) {
         return undefined;
     }
     const num = Number(value);
-    if (!isFinite(num)) {
-        throw new TypeError(`Value ${value} of ${name} is not a number`);
+    if (!Number.isFinite(num)) {
+        throw new TypeError(`Input "${name}" must be a number`);
     }
     return num;
+}
+function getKtlintVersion() {
+    const ktlinVersion = getString('ktlint-version');
+    if (ktlinVersion === undefined) {
+        throw new Error('Input "ktlint-version" required but not supplied');
+    }
+    return ktlinVersion;
+}
+function isLevel(level) {
+    return ['error', 'warning', 'notice', 'none'].includes(level);
+}
+function getLevel() {
+    const level = getString('level');
+    if (level === undefined) {
+        throw new Error('Input "level" required but not supplied');
+    }
+    if (!isLevel(level)) {
+        throw new Error('Input "level" must be one of: error, warning, notice or none');
+    }
+    return level;
 }
 const android = getBoolean('android');
 const debug = getBoolean('debug');
@@ -70,13 +86,11 @@ const editorconfig = getString('editorconfig');
 const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
 const patterns = getList('patterns');
-const version = (_a = getString('version')) !== null && _a !== void 0 ? _a : VERSION_DEFAULT;
-const annotate = (_b = getBoolean('annotate')) !== null && _b !== void 0 ? _b : ANNOTATE_DEFAULT;
-const warn = (_c = getBoolean('warn')) !== null && _c !== void 0 ? _c : WARN_DEFAULT;
+const ktlintVersion = getKtlintVersion();
+const level = getLevel();
 const input = {
-    version,
-    annotate,
-    warn,
+    ktlintVersion,
+    level,
     android,
     debug,
     disabledRules,
@@ -202,29 +216,24 @@ async function lint(args) {
     core.endGroup();
     return exitCode;
 }
-async function createReporter(tool, warn) {
+async function createReporter(tool, level) {
     const { path } = tool;
-    const args = warn ? '?warn' : '';
-    return `github${args},artifact=${path}`;
+    return `github?level=${level},artifact=${path}`;
 }
 async function check(input) {
     var _a;
-    const { version, warn, annotate } = input;
-    await (0, setup_linter_1.install)(version);
-    const reporterTool = annotate ? await (0, setup_reporter_1.install)() : null;
-    const reporter = reporterTool
-        ? await createReporter(reporterTool, warn)
-        : null;
+    const { ktlintVersion, level } = input;
+    await (0, setup_linter_1.install)(ktlintVersion);
+    const reporterTool = await (0, setup_reporter_1.install)();
+    const reporter = await createReporter(reporterTool, level);
     const options = {
         ...input,
-        ...(reporter && {
-            reporter: [...((_a = input.reporter) !== null && _a !== void 0 ? _a : []), reporter],
-        }),
+        reporter: [...((_a = input.reporter) !== null && _a !== void 0 ? _a : []), reporter],
     };
     const args = (0, linter_1.buildArguments)(options);
     const exitCode = await lint(args);
-    if (exitCode !== 0 && !warn) {
-        throw new Error(`ktlint exited with code ${exitCode}`);
+    if (exitCode !== 0 && level === 'error') {
+        throw new Error(`ktlint exited with code ${exitCode}.`);
     }
 }
 check(input_1.default).catch(core.setFailed);
@@ -292,7 +301,7 @@ exports.install = install;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
 const tool_provisioner_1 = __nccwpck_require__(295);
-const TOOL_VERSION = '1.2.1';
+const TOOL_VERSION = '2.1.0';
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;
 function buildDownloadUrl(version) {

@@ -1,9 +1,5 @@
 import {getBooleanInput, getInput} from '@actions/core';
-import {Input} from './types';
-
-const VERSION_DEFAULT = '0.45.2';
-const ANNOTATE_DEFAULT = true;
-const WARN_DEFAULT = false;
+import {Input, Level} from './types';
 
 function getBoolean(name: string): boolean | undefined {
   try {
@@ -13,7 +9,7 @@ function getBoolean(name: string): boolean | undefined {
     if (value.length <= 0) {
       return undefined;
     } else {
-      throw new TypeError(`Value ${value} of ${name} is not a boolean`);
+      throw new TypeError(`Input "${name}" must be a boolean`);
     }
   }
 }
@@ -51,11 +47,39 @@ function getNumber(name: string): number | undefined {
   }
 
   const num = Number(value);
-  if (!isFinite(num)) {
-    throw new TypeError(`Value ${value} of ${name} is not a number`);
+  if (!Number.isFinite(num)) {
+    throw new TypeError(`Input "${name}" must be a number`);
   }
 
   return num;
+}
+
+function getKtlintVersion(): string {
+  const ktlinVersion = getString('ktlint-version');
+  if (ktlinVersion === undefined) {
+    throw new Error('Input "ktlint-version" required but not supplied');
+  }
+
+  return ktlinVersion;
+}
+
+function isLevel(level: string): level is Level {
+  return ['error', 'warning', 'notice', 'none'].includes(level);
+}
+
+function getLevel(): Level {
+  const level = getString('level');
+  if (level === undefined) {
+    throw new Error('Input "level" required but not supplied');
+  }
+
+  if (!isLevel(level)) {
+    throw new Error(
+      'Input "level" must be one of: error, warning, notice or none',
+    );
+  }
+
+  return level;
 }
 
 const android = getBoolean('android');
@@ -72,14 +96,12 @@ const experimental = getBoolean('experimental');
 const baseline = getString('baseline');
 const patterns = getList('patterns');
 
-const version = getString('version') ?? VERSION_DEFAULT;
-const annotate = getBoolean('annotate') ?? ANNOTATE_DEFAULT;
-const warn = getBoolean('warn') ?? WARN_DEFAULT;
+const ktlintVersion = getKtlintVersion();
+const level = getLevel();
 
 const input: Input = {
-  version,
-  annotate,
-  warn,
+  ktlintVersion,
+  level,
 
   android,
   debug,
