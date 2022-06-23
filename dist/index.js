@@ -207,15 +207,6 @@ const input_1 = __importDefault(__nccwpck_require__(657));
 const setup_linter_1 = __nccwpck_require__(231);
 const setup_reporter_1 = __nccwpck_require__(795);
 const linter_1 = __nccwpck_require__(237);
-async function lint(args) {
-    core.startGroup('ktlint check');
-    const execOptions = {
-        ignoreReturnCode: true,
-    };
-    const exitCode = await (0, exec_1.exec)('ktlint', args, execOptions);
-    core.endGroup();
-    return exitCode;
-}
 async function createReporter(tool, level) {
     const { path } = tool;
     return `github?level=${level},artifact=${path}`;
@@ -231,10 +222,7 @@ async function check(input) {
         reporter: [...((_a = input.reporter) !== null && _a !== void 0 ? _a : []), reporter],
     };
     const args = (0, linter_1.buildArguments)(options);
-    const exitCode = await lint(args);
-    if (exitCode !== 0 && level === 'error') {
-        throw new Error(`ktlint exited with code ${exitCode}.`);
-    }
+    await (0, exec_1.exec)('ktlint', args);
 }
 check(input_1.default).catch(core.setFailed);
 //# sourceMappingURL=main.js.map

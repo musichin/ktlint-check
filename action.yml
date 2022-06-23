@@ -20,7 +20,7 @@ inputs:
     required: false
   debug:
     required: false
-  disabledRules:
+  disabled_rules:
     required: false
   format:
     required: false
