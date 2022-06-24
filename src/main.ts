@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import {exec} from '@actions/exec';
-import input from './input';
+import {parseInput} from './input';
 import {install as installLinter} from './setup-linter';
 import {install as installReporter} from './setup-reporter';
 import {buildArguments} from './linter';
@@ -26,4 +26,4 @@ async function check(input: Input) {
   await exec('ktlint', args);
 }
 
-check(input).catch(core.setFailed);
+check(parseInput()).catch(core.setFailed);

@@ -24,9 +24,6 @@ function getList(name: string): string[] | undefined {
     .split('\n')
     .map((v) => v.trim())
     .filter((v) => v.length > 0);
-  if (values.length <= 0) {
-    return undefined;
-  }
 
   return values;
 }
@@ -82,40 +79,42 @@ function getLevel(): Level {
   return level;
 }
 
-const android = getBoolean('android');
-const debug = getBoolean('debug');
-const disabledRules = getList('disabled_rules');
-const format = getBoolean('format');
-const limit = getNumber('limit');
-const relative = getBoolean('relative');
-const reporter = getList('reporter');
-const ruleset = getString('ruleset');
-const verbose = getBoolean('verbose');
-const editorconfig = getString('editorconfig');
-const experimental = getBoolean('experimental');
-const baseline = getString('baseline');
-const patterns = getList('patterns');
+function parseInput(): Input {
+  const android = getBoolean('android');
+  const debug = getBoolean('debug');
+  const disabledRules = getList('disabled_rules');
+  const format = getBoolean('format');
+  const limit = getNumber('limit');
+  const relative = getBoolean('relative');
+  const reporter = getList('reporter');
+  const ruleset = getString('ruleset');
+  const verbose = getBoolean('verbose');
+  const editorconfig = getString('editorconfig');
+  const experimental = getBoolean('experimental');
+  const baseline = getString('baseline');
+  const patterns = getList('patterns');
 
-const ktlintVersion = getKtlintVersion();
-const level = getLevel();
+  const ktlintVersion = getKtlintVersion();
+  const level = getLevel();
 
-const input: Input = {
-  ktlintVersion,
-  level,
+  return {
+    ktlintVersion,
+    level,
 
-  android,
-  debug,
-  disabledRules,
-  format,
-  limit,
-  relative,
-  reporter,
-  ruleset,
-  verbose,
-  editorconfig,
-  experimental,
-  baseline,
-  patterns,
-};
+    android,
+    debug,
+    disabledRules,
+    format,
+    limit,
+    relative,
+    reporter,
+    ruleset,
+    verbose,
+    editorconfig,
+    experimental,
+    baseline,
+    patterns,
+  };
+}
 
-export = input;
+export {parseInput};
