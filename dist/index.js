@@ -2,10 +2,12 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 657:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseInput = void 0;
 const core_1 = __nccwpck_require__(186);
 function getBoolean(name) {
     try {
@@ -30,9 +32,6 @@ function getList(name) {
         .split('\n')
         .map((v) => v.trim())
         .filter((v) => v.length > 0);
-    if (values.length <= 0) {
-        return undefined;
-    }
     return values;
 }
 function getString(name) {
@@ -73,39 +72,41 @@ function getLevel() {
     }
     return level;
 }
-const android = getBoolean('android');
-const debug = getBoolean('debug');
-const disabledRules = getList('disabled_rules');
-const format = getBoolean('format');
-const limit = getNumber('limit');
-const relative = getBoolean('relative');
-const reporter = getList('reporter');
-const ruleset = getString('ruleset');
-const verbose = getBoolean('verbose');
-const editorconfig = getString('editorconfig');
-const experimental = getBoolean('experimental');
-const baseline = getString('baseline');
-const patterns = getList('patterns');
-const ktlintVersion = getKtlintVersion();
-const level = getLevel();
-const input = {
-    ktlintVersion,
-    level,
-    android,
-    debug,
-    disabledRules,
-    format,
-    limit,
-    relative,
-    reporter,
-    ruleset,
-    verbose,
-    editorconfig,
-    experimental,
-    baseline,
-    patterns,
-};
-module.exports = input;
+function parseInput() {
+    const android = getBoolean('android');
+    const debug = getBoolean('debug');
+    const disabledRules = getList('disabled_rules');
+    const format = getBoolean('format');
+    const limit = getNumber('limit');
+    const relative = getBoolean('relative');
+    const reporter = getList('reporter');
+    const ruleset = getString('ruleset');
+    const verbose = getBoolean('verbose');
+    const editorconfig = getString('editorconfig');
+    const experimental = getBoolean('experimental');
+    const baseline = getString('baseline');
+    const patterns = getList('patterns');
+    const ktlintVersion = getKtlintVersion();
+    const level = getLevel();
+    return {
+        ktlintVersion,
+        level,
+        android,
+        debug,
+        disabledRules,
+        format,
+        limit,
+        relative,
+        reporter,
+        ruleset,
+        verbose,
+        editorconfig,
+        experimental,
+        baseline,
+        patterns,
+    };
+}
+exports.parseInput = parseInput;
 //# sourceMappingURL=input.js.map
 
 /***/ }),
@@ -197,13 +198,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const exec_1 = __nccwpck_require__(514);
-const input_1 = __importDefault(__nccwpck_require__(657));
+const input_1 = __nccwpck_require__(657);
 const setup_linter_1 = __nccwpck_require__(231);
 const setup_reporter_1 = __nccwpck_require__(795);
 const linter_1 = __nccwpck_require__(237);
@@ -224,7 +222,7 @@ async function check(input) {
     const args = (0, linter_1.buildArguments)(options);
     await (0, exec_1.exec)('ktlint', args);
 }
-check(input_1.default).catch(core.setFailed);
+check((0, input_1.parseInput)()).catch(core.setFailed);
 //# sourceMappingURL=main.js.map
 
 /***/ }),
@@ -336,8 +334,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOrDownload = void 0;
-const path = __importStar(__nccwpck_require__(17));
 const tc = __importStar(__nccwpck_require__(784));
+const path = __importStar(__nccwpck_require__(17));
 function createTool(name, directory, version, fileName) {
     return {
         name: name,
@@ -347,12 +345,16 @@ function createTool(name, directory, version, fileName) {
         path: path.join(directory, fileName),
     };
 }
-async function getOrDownload(name, version, downloadUrl, fileName) {
-    let path = tc.find(name, version);
-    if (!path) {
-        const downloadedFile = await tc.downloadTool(downloadUrl);
-        path = await tc.cacheFile(downloadedFile, fileName, name, version);
+async function findOrDownload(name, version, downloadUrl, fileName) {
+    const path = tc.find(name, version);
+    if (path) {
+        return path;
     }
+    const downloadedFile = await tc.downloadTool(downloadUrl);
+    return await tc.cacheFile(downloadedFile, fileName, name, version);
+}
+async function getOrDownload(name, version, downloadUrl, fileName) {
+    const path = await findOrDownload(name, version, downloadUrl, fileName);
     return createTool(name, path, version, fileName);
 }
 exports.getOrDownload = getOrDownload;

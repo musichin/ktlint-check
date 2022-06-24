@@ -1,5 +1,5 @@
-import * as path from 'path';
 import * as tc from '@actions/tool-cache';
+import * as path from 'path';
 import {Tool} from './types';
 
 function createTool(
@@ -17,19 +17,28 @@ function createTool(
   };
 }
 
+async function findOrDownload(
+  name: string,
+  version: string,
+  downloadUrl: string,
+  fileName: string,
+): Promise<string> {
+  const path = tc.find(name, version);
+  if (path) {
+    return path;
+  }
+
+  const downloadedFile = await tc.downloadTool(downloadUrl);
+  return await tc.cacheFile(downloadedFile, fileName, name, version);
+}
+
 async function getOrDownload(
   name: string,
   version: string,
   downloadUrl: string,
   fileName: string,
 ): Promise<Tool> {
-  let path = tc.find(name, version);
-
-  if (!path) {
-    const downloadedFile = await tc.downloadTool(downloadUrl);
-    path = await tc.cacheFile(downloadedFile, fileName, name, version);
-  }
-
+  const path = await findOrDownload(name, version, downloadUrl, fileName);
   return createTool(name, path, version, fileName);
 }
 
