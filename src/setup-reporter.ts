@@ -1,7 +1,7 @@
 import {Tool} from './types';
 import {getOrDownload} from './tool-provisioner';
 
-const TOOL_VERSION = '2.1.0';
+const TOOL_VERSION = '2.2.0';
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;
 
