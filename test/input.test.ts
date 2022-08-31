@@ -1,10 +1,9 @@
-import {expect, it, describe} from '@jest/globals';
 import {parseInput} from '../src/input';
 
 function setEnvVars(input?: {[key: string]: string}) {
   const variables: {[key: string]: string} = {
     level: 'error',
-    'ktlint-version': '0.46.1',
+    'ktlint-version': '0.47.0',
     android: '',
     limit: '',
     patterns: '',
@@ -17,36 +16,36 @@ function setEnvVars(input?: {[key: string]: string}) {
 
 describe('parseInput', () => {
   describe('ktlintVersion', () => {
-    it('undefined', () => {
+    test('undefined', () => {
       setEnvVars({'ktlint-version': ''});
       expect(() => parseInput()).toThrow(
         'Input "ktlint-version" required but not supplied',
       );
     });
 
-    it('valid', () => {
-      setEnvVars({'ktlint-version': '0.46.1'});
+    test('valid', () => {
+      setEnvVars({'ktlint-version': '0.47.0'});
       const {ktlintVersion} = parseInput();
-      expect(ktlintVersion).toEqual('0.46.1');
+      expect(ktlintVersion).toEqual('0.47.0');
     });
   });
 
   describe('level', () => {
-    it('undefined', () => {
+    test('undefined', () => {
       setEnvVars({level: ''});
       expect(() => parseInput()).toThrow(
         'Input "level" required but not supplied',
       );
     });
 
-    it('invalid', () => {
+    test('invalid', () => {
       setEnvVars({level: 'test'});
       expect(() => parseInput()).toThrow(
         'Input "level" must be one of: error, warning, notice or none',
       );
     });
 
-    it('valid', () => {
+    test('valid', () => {
       setEnvVars({level: 'warning'});
       const {level} = parseInput();
       expect(level).toEqual('warning');
@@ -54,63 +53,63 @@ describe('parseInput', () => {
   });
 
   describe('android', () => {
-    it('undefined', () => {
+    test('undefined', () => {
       setEnvVars({android: ''});
       const {android} = parseInput();
       expect(android).toBeUndefined();
     });
 
-    it('false', () => {
+    test('false', () => {
       setEnvVars({android: 'false'});
       const {android} = parseInput();
       expect(android).toStrictEqual(false);
     });
 
-    it('true', () => {
+    test('true', () => {
       setEnvVars({android: 'true'});
       const {android} = parseInput();
       expect(android).toStrictEqual(true);
     });
 
-    it('invalid', () => {
+    test('invalid', () => {
       setEnvVars({android: 'not_a_boolean'});
       expect(() => parseInput()).toThrow('Input "android" must be a boolean');
     });
   });
 
   describe('limit', () => {
-    it('undefined', () => {
+    test('undefined', () => {
       setEnvVars({limit: ''});
       const {limit} = parseInput();
       expect(limit).toBeUndefined();
     });
 
-    it('valid', () => {
+    test('valid', () => {
       setEnvVars({limit: '5'});
       const {limit} = parseInput();
       expect(limit).toStrictEqual(5);
     });
 
-    it('invalid', () => {
+    test('invalid', () => {
       setEnvVars({limit: 'NaN'});
       expect(() => parseInput()).toThrow('Input "limit" must be a number');
     });
   });
 
   describe('patterns', () => {
-    it('undefined', () => {
+    test('undefined', () => {
       setEnvVars({patterns: ''});
       const {patterns} = parseInput();
       expect(patterns).toBeUndefined();
     });
 
-    it('empty', () => {
+    test('empty', () => {
       setEnvVars({patterns: '\n   \n'});
       const {patterns} = parseInput();
       expect(patterns).toBeUndefined();
     });
 
-    it('valid', () => {
+    test('valid', () => {
       setEnvVars({patterns: 'a\nb\n   \nc'});
       const {patterns} = parseInput();
       expect(patterns).toStrictEqual(['a', 'b', 'c']);

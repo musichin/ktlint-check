@@ -1,19 +1,18 @@
-import {expect, it, describe} from '@jest/globals';
 import {buildArguments} from '../src/linter';
 import {Options} from '../src/types';
 
 describe('#linter', () => {
   describe('#buildArguments', () => {
-    it('undefined arguments', () => {
+    test('undefined arguments', () => {
       const args = buildArguments(undefined);
       expect(args.length).toStrictEqual(0);
     });
-    it('empty arguments', () => {
+    test('empty arguments', () => {
       const options: Options = {};
       const args = buildArguments(options);
       expect(args.length).toStrictEqual(0);
     });
-    it('all arguments', () => {
+    test('all arguments', () => {
       const options: Options = {
         android: true,
         debug: true,
