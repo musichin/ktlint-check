@@ -8,8 +8,8 @@ branding:
 inputs:
   ktlint-version:
     required: true
-    default: '0.47.0'
-    description: 'Version of ktlint, e.g. "0.47.0"'
+    default: '0.47.1'
+    description: 'Version of ktlint, e.g. "0.47.1"'
   level:
     required: true
     default: 'error'
