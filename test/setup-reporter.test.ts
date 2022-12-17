@@ -6,7 +6,7 @@ describe('#setup-reporter', () => {
       const tool = await install();
       expect(tool).toBeTruthy();
       expect(tool.name).toStrictEqual('ktlint-github-reporter');
-      expect(tool.version).toStrictEqual('2.2.0');
+      expect(tool.version).toStrictEqual('2.3.0');
     }, 60_000);
   });
 });

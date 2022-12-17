@@ -8,8 +8,8 @@ branding:
 inputs:
   ktlint-version:
     required: true
-    default: '0.47.1'
-    description: 'Version of ktlint, e.g. "0.47.1"'
+    default: '0.48.0'
+    description: 'Version of ktlint, e.g. "0.48.0"'
   level:
     required: true
     default: 'error'
@@ -19,6 +19,8 @@ inputs:
   android:
     required: false
   debug:
+    required: false
+  trace:
     required: false
   disabled_rules:
     required: false
@@ -32,16 +34,18 @@ inputs:
     required: false
   ruleset:
     required: false
+  verbose:
+    required: false
   editorconfig:
     required: false
   experimental:
     required: false
   baseline:
     required: false
+  log-level:
+    required: false
   patterns:
     required: false
-  verbose:
-   required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

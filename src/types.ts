@@ -1,6 +1,7 @@
 interface Options {
   android?: boolean;
   debug?: boolean;
+  trace?: boolean;
   disabledRules?: string[];
   format?: boolean;
   limit?: number;
@@ -11,6 +12,7 @@ interface Options {
   editorconfig?: string;
   experimental?: boolean;
   baseline?: string;
+  logLevel?: string;
   patterns?: string[];
 }
 
