@@ -82,6 +82,7 @@ function getLevel(): Level {
 function parseInput(): Input {
   const android = getBoolean('android');
   const debug = getBoolean('debug');
+  const trace = getBoolean('trace');
   const disabledRules = getList('disabled_rules');
   const format = getBoolean('format');
   const limit = getNumber('limit');
@@ -92,6 +93,7 @@ function parseInput(): Input {
   const editorconfig = getString('editorconfig');
   const experimental = getBoolean('experimental');
   const baseline = getString('baseline');
+  const logLevel = getString('log-level');
   const patterns = getList('patterns');
 
   const ktlintVersion = getKtlintVersion();
@@ -103,6 +105,7 @@ function parseInput(): Input {
 
     android,
     debug,
+    trace,
     disabledRules,
     format,
     limit,
@@ -113,6 +116,7 @@ function parseInput(): Input {
     editorconfig,
     experimental,
     baseline,
+    logLevel,
     patterns,
   };
 }

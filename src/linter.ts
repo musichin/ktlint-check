@@ -9,6 +9,7 @@ function buildArguments(options?: Options): string[] {
   const {
     android,
     debug,
+    trace,
     disabledRules,
     format,
     limit,
@@ -19,6 +20,7 @@ function buildArguments(options?: Options): string[] {
     editorconfig,
     experimental,
     baseline,
+    logLevel,
     patterns,
   } = options;
 
@@ -28,6 +30,10 @@ function buildArguments(options?: Options): string[] {
 
   if (debug === true) {
     args.push('--debug');
+  }
+
+  if (trace === true) {
+    args.push('--trace');
   }
 
   if (disabledRules != undefined && disabledRules.length > 0) {
@@ -68,6 +74,10 @@ function buildArguments(options?: Options): string[] {
 
   if (baseline !== undefined) {
     args.push(`--baseline=${baseline}`);
+  }
+
+  if (logLevel !== undefined) {
+    args.push(`--log-level=${logLevel}`);
   }
 
   if (patterns !== undefined) {
