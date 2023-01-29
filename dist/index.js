@@ -53,11 +53,11 @@ function getNumber(name) {
     return num;
 }
 function getKtlintVersion() {
-    const ktlinVersion = getString('ktlint-version');
-    if (ktlinVersion === undefined) {
+    const ktlintVersion = getString('ktlint-version');
+    if (ktlintVersion === undefined) {
         throw new Error('Input "ktlint-version" required but not supplied');
     }
-    return ktlinVersion;
+    return ktlintVersion;
 }
 function isLevel(level) {
     return ['error', 'warning', 'notice', 'none'].includes(level);
