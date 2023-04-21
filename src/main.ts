@@ -15,7 +15,7 @@ async function check(input: Input) {
   const {ktlintVersion, level} = input;
 
   await installLinter(ktlintVersion);
-  const reporterTool = await installReporter();
+  const reporterTool = await installReporter(ktlintVersion);
   const reporter = await createReporter(reporterTool, level);
   const options: Options = {
     ...input,
