@@ -73,41 +73,43 @@ function getLevel() {
     return level;
 }
 function parseInput() {
-    const android = getBoolean('android');
-    const debug = getBoolean('debug');
-    const trace = getBoolean('trace');
+    const ktlintVersion = getKtlintVersion();
+    const level = getLevel();
+    const patterns = getList('patterns');
+    const codeStyle = getString('disabled_rules');
     const disabledRules = getList('disabled_rules');
     const format = getBoolean('format');
     const limit = getNumber('limit');
     const relative = getBoolean('relative');
     const reporter = getList('reporter');
     const ruleset = getString('ruleset');
-    const verbose = getBoolean('verbose');
     const editorconfig = getString('editorconfig');
     const experimental = getBoolean('experimental');
     const baseline = getString('baseline');
     const logLevel = getString('log-level');
-    const patterns = getList('patterns');
-    const ktlintVersion = getKtlintVersion();
-    const level = getLevel();
+    const android = getBoolean('android'); // deprecated
+    const debug = getBoolean('debug'); // deprecated
+    const trace = getBoolean('trace'); // deprecated
+    const verbose = getBoolean('verbose'); // deprecated
     return {
         ktlintVersion,
         level,
-        android,
-        debug,
-        trace,
+        patterns,
+        codeStyle,
         disabledRules,
         format,
         limit,
         relative,
         reporter,
         ruleset,
-        verbose,
         editorconfig,
         experimental,
         baseline,
         logLevel,
-        patterns,
+        android,
+        debug,
+        trace,
+        verbose,
     };
 }
 exports.parseInput = parseInput;
@@ -127,15 +129,16 @@ function buildArguments(options) {
     if (options === undefined) {
         return args;
     }
-    const { android, debug, trace, disabledRules, format, limit, relative, reporter, ruleset, verbose, editorconfig, experimental, baseline, logLevel, patterns, } = options;
-    if (android === true) {
-        args.push('--android');
+    const { patterns, codeStyle, disabledRules, format, limit, relative, reporter, ruleset, editorconfig, experimental, baseline, logLevel, android, // deprecated
+    debug, // deprecated
+    trace, // deprecated
+    verbose, // deprecated
+     } = options;
+    if (logLevel !== undefined) {
+        args.push(`--log-level=${logLevel}`);
     }
-    if (debug === true) {
-        args.push('--debug');
-    }
-    if (trace === true) {
-        args.push('--trace');
+    if (codeStyle !== undefined) {
+        args.push(`--code-style=${codeStyle}`);
     }
     if (disabledRules != undefined && disabledRules.length > 0) {
         args.push(`--disabled_rules=${disabledRules.join(',')}`);
@@ -155,9 +158,6 @@ function buildArguments(options) {
     if (ruleset !== undefined) {
         args.push(`--ruleset=${ruleset}`);
     }
-    if (verbose === true) {
-        args.push('--verbose');
-    }
     if (editorconfig !== undefined) {
         args.push(`--editorconfig=${editorconfig}`);
     }
@@ -167,11 +167,21 @@ function buildArguments(options) {
     if (baseline !== undefined) {
         args.push(`--baseline=${baseline}`);
     }
-    if (logLevel !== undefined) {
-        args.push(`--log-level=${logLevel}`);
-    }
     if (patterns !== undefined) {
         patterns.forEach((pattern) => args.push(pattern));
+    }
+    // deprecated
+    if (android === true) {
+        args.push('--android');
+    }
+    if (debug === true) {
+        args.push('--debug');
+    }
+    if (trace === true) {
+        args.push('--trace');
+    }
+    if (verbose === true) {
+        args.push('--verbose');
     }
     return args;
 }

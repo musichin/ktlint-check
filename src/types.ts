@@ -1,19 +1,21 @@
 interface Options {
-  android?: boolean;
-  debug?: boolean;
-  trace?: boolean;
+  patterns?: string[];
+  codeStyle?: string;
   disabledRules?: string[];
   format?: boolean;
   limit?: number;
   relative?: boolean;
   reporter?: string[];
   ruleset?: string;
-  verbose?: boolean;
   editorconfig?: string;
   experimental?: boolean;
   baseline?: string;
   logLevel?: string;
-  patterns?: string[];
+
+  android?: boolean; // deprecated
+  debug?: boolean; // deprecated
+  trace?: boolean; // deprecated
+  verbose?: boolean; // deprecated
 }
 
 type Level = 'error' | 'warning' | 'notice' | 'none';

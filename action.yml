@@ -15,12 +15,11 @@ inputs:
     default: 'error'
     description: 'Annotation level for lint errors. Possible values: "error", "warning", "notice", "none"'
 
+
   # use "ktlint --help" for more information
-  android:
+  patterns:
     required: false
-  debug:
-    required: false
-  trace:
+  code-style:
     required: false
   disabled_rules:
     required: false
@@ -34,8 +33,6 @@ inputs:
     required: false
   ruleset:
     required: false
-  verbose:
-    required: false
   editorconfig:
     required: false
   experimental:
@@ -44,8 +41,18 @@ inputs:
     required: false
   log-level:
     required: false
-  patterns:
+  android:
     required: false
+    deprecationMessage: code-style
+  debug:
+    required: false
+    deprecationMessage: log-level
+  trace:
+    required: false
+    deprecationMessage: log-level
+  verbose:
+    required: false
+    deprecationMessage: log-level
 runs:
   using: 'node16'
   main: 'dist/index.js'

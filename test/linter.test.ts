@@ -14,40 +14,43 @@ describe('#linter', () => {
     });
     test('all arguments', () => {
       const options: Options = {
-        android: true,
-        debug: true,
-        trace: true,
+        codeStyle: 'testCodeStyle',
         disabledRules: ['testRule'],
         format: true,
         limit: 10,
         relative: true,
         reporter: ['testReporter'],
         ruleset: 'testRuleset',
-        verbose: true,
         editorconfig: 'testEditorconfig',
         experimental: true,
         baseline: 'testBaseline',
         logLevel: 'info',
         patterns: ['testPattern'],
+
+        android: true,
+        debug: true,
+        trace: true,
+        verbose: true,
       };
       const args = buildArguments(options);
 
-      expect(args).toContain('--android');
-      expect(args).toContain('--debug');
-      expect(args).toContain('--trace');
+      expect(args.length).toStrictEqual(16);
+      expect(args).toContain('testPattern');
+      expect(args).toContain('--code-style=testCodeStyle');
       expect(args).toContain('--disabled_rules=testRule');
       expect(args).toContain('--format');
       expect(args).toContain('--limit=10');
       expect(args).toContain('--relative');
       expect(args).toContain('--reporter=testReporter');
       expect(args).toContain('--ruleset=testRuleset');
-      expect(args).toContain('--verbose');
       expect(args).toContain('--editorconfig=testEditorconfig');
       expect(args).toContain('--experimental');
       expect(args).toContain('--baseline=testBaseline');
       expect(args).toContain('--log-level=info');
-      expect(args).toContain('testPattern');
-      expect(args.length).toStrictEqual(15);
+      expect(args).toContain('--android');
+      expect(args).toContain('--debug');
+      expect(args).toContain('--trace');
+      expect(args).toContain('--verbose');
     });
   });
 });
