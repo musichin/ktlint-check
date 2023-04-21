@@ -7,33 +7,31 @@ function buildArguments(options?: Options): string[] {
   }
 
   const {
-    android,
-    debug,
-    trace,
+    patterns,
+    codeStyle,
     disabledRules,
     format,
     limit,
     relative,
     reporter,
     ruleset,
-    verbose,
     editorconfig,
     experimental,
     baseline,
     logLevel,
-    patterns,
+
+    android, // deprecated
+    debug, // deprecated
+    trace, // deprecated
+    verbose, // deprecated
   } = options;
 
-  if (android === true) {
-    args.push('--android');
+  if (logLevel !== undefined) {
+    args.push(`--log-level=${logLevel}`);
   }
 
-  if (debug === true) {
-    args.push('--debug');
-  }
-
-  if (trace === true) {
-    args.push('--trace');
+  if (codeStyle !== undefined) {
+    args.push(`--code-style=${codeStyle}`);
   }
 
   if (disabledRules != undefined && disabledRules.length > 0) {
@@ -60,10 +58,6 @@ function buildArguments(options?: Options): string[] {
     args.push(`--ruleset=${ruleset}`);
   }
 
-  if (verbose === true) {
-    args.push('--verbose');
-  }
-
   if (editorconfig !== undefined) {
     args.push(`--editorconfig=${editorconfig}`);
   }
@@ -76,12 +70,25 @@ function buildArguments(options?: Options): string[] {
     args.push(`--baseline=${baseline}`);
   }
 
-  if (logLevel !== undefined) {
-    args.push(`--log-level=${logLevel}`);
-  }
-
   if (patterns !== undefined) {
     patterns.forEach((pattern) => args.push(pattern));
+  }
+
+  // deprecated
+  if (android === true) {
+    args.push('--android');
+  }
+
+  if (debug === true) {
+    args.push('--debug');
+  }
+
+  if (trace === true) {
+    args.push('--trace');
+  }
+
+  if (verbose === true) {
+    args.push('--verbose');
   }
 
   return args;

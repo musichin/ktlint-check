@@ -26,7 +26,7 @@ steps:
       level: 'warning'
 
       # ktlint
-      android: true
+      code-style: android_studio
       relative: true
       experimental: true
       reporter: |
