@@ -10,7 +10,7 @@ describe('#setup-reporter', () => {
     }, 60_000);
 
     test('ktlint verssion >= 0.49.0', async () => {
-      const tool = await install('0.49.1');
+      const tool = await install('0.50.0');
       expect(tool).toBeTruthy();
       expect(tool.name).toStrictEqual('ktlint-github-reporter');
       expect(tool.version).toStrictEqual('3.0.1');
