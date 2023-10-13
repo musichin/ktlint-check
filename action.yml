@@ -54,5 +54,5 @@ inputs:
     required: false
     deprecationMessage: log-level
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
