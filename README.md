@@ -8,8 +8,8 @@ See [action.yml](action.yml)
 **Basic:**
 ```yaml
 steps:
-  - uses: actions/checkout@v3
-  - uses: musichin/ktlint-check@v2
+  - uses: actions/checkout@v4
+  - uses: musichin/ktlint-check@v3
     with:
       ktlint-version: '1.0.1'
 ```
@@ -18,8 +18,8 @@ The ktlint `ktlint-version` input is optional, however, it is strongly recommend
 **Advanced**
 ```yaml
 steps:
-  - uses: actions/checkout@v3
-  - uses: musichin/ktlint-check@v2
+  - uses: actions/checkout@v4
+  - uses: musichin/ktlint-check@v3
     continue-on-error: true
     with:
       ktlint-version: '1.0.1'
