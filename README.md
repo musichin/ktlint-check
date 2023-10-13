@@ -8,21 +8,21 @@ See [action.yml](action.yml)
 **Basic:**
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: musichin/ktlint-check@v2
     with:
-      ktlint-version: '1.0.0'
+      ktlint-version: '1.0.1'
 ```
 The ktlint `ktlint-version` input is optional, however, it is strongly recommended to always specify it.
 
 **Advanced**
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: musichin/ktlint-check@v2
     continue-on-error: true
     with:
-      ktlint-version: '1.0.0'
+      ktlint-version: '1.0.1'
       level: 'warning'
 
       # ktlint
