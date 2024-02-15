@@ -15,9 +15,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: install
         run: npm ci
@@ -40,4 +40,4 @@ jobs:
       - name: check dist is up-to-date
         run: git diff --name-only --quiet
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
