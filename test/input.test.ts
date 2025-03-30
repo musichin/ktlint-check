@@ -3,7 +3,7 @@ import {parseInput} from '../src/input';
 function setEnvVars(input?: {[key: string]: string}) {
   const variables: {[key: string]: string} = {
     level: 'error',
-    'ktlint-version': '1.1.1',
+    'ktlint-version': '1.5.0',
     android: '',
     limit: '',
     patterns: '',
@@ -15,7 +15,7 @@ function setEnvVars(input?: {[key: string]: string}) {
 }
 
 describe('parseInput', () => {
-  describe('ktlintVersion', () => {
+  describe('ktlint-version', () => {
     test('undefined', () => {
       setEnvVars({'ktlint-version': ''});
       expect(() => parseInput()).toThrow(
@@ -24,9 +24,9 @@ describe('parseInput', () => {
     });
 
     test('valid', () => {
-      setEnvVars({'ktlint-version': '1.1.1'});
+      setEnvVars({'ktlint-version': '1.5.0'});
       const {ktlintVersion} = parseInput();
-      expect(ktlintVersion).toEqual('1.1.1');
+      expect(ktlintVersion).toEqual('1.5.0');
     });
   });
 
@@ -113,6 +113,66 @@ describe('parseInput', () => {
       setEnvVars({patterns: 'a\nb\n   \nc'});
       const {patterns} = parseInput();
       expect(patterns).toStrictEqual(['a', 'b', 'c']);
+    });
+  });
+
+  describe('code-style', () => {
+    test('undefined', () => {
+      setEnvVars({'code-style': ''});
+      const {codeStyle} = parseInput();
+      expect(codeStyle).toBeUndefined();
+    });
+
+    test('valid', () => {
+      setEnvVars({'code-style': 'ktlint_official'});
+      const {codeStyle} = parseInput();
+      expect(codeStyle).toEqual('ktlint_official');
+    });
+  });
+
+  describe('disabled_rules', () => {
+    test('undefined', () => {
+      setEnvVars({'disabled-rules': ''});
+      setEnvVars({disabled_rules: ''});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toBeUndefined();
+    });
+
+    test('empty', () => {
+      setEnvVars({'disabled-rules': ''});
+      setEnvVars({disabled_rules: '\n   \n'});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toBeUndefined();
+    });
+
+    test('valid', () => {
+      setEnvVars({'disabled-rules': ''});
+      setEnvVars({disabled_rules: 'a\nb\n   \nc'});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toStrictEqual(['a', 'b', 'c']);
+    });
+  });
+
+  describe('disabled-rules', () => {
+    test('undefined', () => {
+      setEnvVars({disabled_rules: ''});
+      setEnvVars({'disabled-rules': ''});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toBeUndefined();
+    });
+
+    test('empty', () => {
+      setEnvVars({disabled_rules: ''});
+      setEnvVars({'disabled-rules': '\n   \n'});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toBeUndefined();
+    });
+
+    test('valid', () => {
+      setEnvVars({disabled_rules: ''});
+      setEnvVars({'disabled-rules': 'a\nb\n   \nc'});
+      const {disabledRules} = parseInput();
+      expect(disabledRules).toStrictEqual(['a', 'b', 'c']);
     });
   });
 });
