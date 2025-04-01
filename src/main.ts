@@ -6,7 +6,7 @@ import {install as installReporter} from './setup-reporter';
 import {buildArguments} from './linter';
 import {Input, Level, Options, Tool} from './types';
 
-async function createReporter(tool: Tool, level: Level): Promise<string> {
+function createReporter(tool: Tool, level: Level): string {
   const {path} = tool;
   return `github?level=${level},artifact=${path}`;
 }
@@ -16,7 +16,7 @@ async function check(input: Input) {
 
   await installLinter(ktlintVersion);
   const reporterTool = await installReporter(ktlintVersion);
-  const reporter = await createReporter(reporterTool, level);
+  const reporter = createReporter(reporterTool, level);
   const options: Options = {
     ...input,
     reporter: [...(input.reporter ?? []), reporter],

@@ -43,7 +43,7 @@ function buildArguments(options?: Options): string[] {
   }
 
   if (limit !== undefined) {
-    args.push(`--limit=${limit}`);
+    args.push(`--limit=${limit.toFixed()}`);
   }
 
   if (relative === true) {

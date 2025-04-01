@@ -4,7 +4,7 @@ import {Input, Level} from './types';
 function getBoolean(name: string): boolean | undefined {
   try {
     return getBooleanInput(name);
-  } catch (err) {
+  } catch {
     const value = getInput(name);
     if (value.length <= 0) {
       return undefined;
@@ -51,6 +51,19 @@ function getNumber(name: string): number | undefined {
   return num;
 }
 
+function getInteger(name: string): number | undefined {
+  const value = getNumber(name);
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Number.isInteger(value)) {
+    throw new TypeError(`Input "${name}" must be an integer`);
+  }
+
+  return value;
+}
+
 function getKtlintVersion(): string {
   const ktlintVersion = getString('ktlint-version');
   if (ktlintVersion === undefined) {
@@ -84,10 +97,9 @@ function parseInput(): Input {
   const level = getLevel();
 
   const patterns = getList('patterns');
-  const codeStyle = getString('disabled_rules');
-  const disabledRules = getList('disabled_rules');
+  const codeStyle = getString('code-style');
   const format = getBoolean('format');
-  const limit = getNumber('limit');
+  const limit = getInteger('limit');
   const relative = getBoolean('relative');
   const reporter = getList('reporter');
   const ruleset = getString('ruleset');
@@ -100,6 +112,7 @@ function parseInput(): Input {
   const debug = getBoolean('debug'); // deprecated
   const trace = getBoolean('trace'); // deprecated
   const verbose = getBoolean('verbose'); // deprecated
+  const disabledRules = getList('disabled-rules') ?? getList('disabled_rules'); // deprecated
 
   return {
     ktlintVersion,
