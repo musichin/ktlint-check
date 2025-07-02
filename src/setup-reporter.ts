@@ -1,6 +1,6 @@
-import {Tool} from './types';
-import {getOrDownload} from './tool-provisioner';
 import semver from 'semver';
+import { getOrDownload } from './tool-provisioner';
+import type { Tool } from './types';
 
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;
@@ -30,4 +30,4 @@ async function install(ktlintVersion: string): Promise<Tool> {
   return await provision(getToolVersion(ktlintVersion));
 }
 
-export {install};
+export { install };

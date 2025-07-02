@@ -1,5 +1,5 @@
-import {getBooleanInput, getInput} from '@actions/core';
-import {Input, Level} from './types';
+import { getBooleanInput, getInput } from '@actions/core';
+import type { Input, Level } from './types';
 
 function getBoolean(name: string): boolean | undefined {
   try {
@@ -138,4 +138,4 @@ function parseInput(): Input {
   };
 }
 
-export {parseInput};
+export { parseInput };

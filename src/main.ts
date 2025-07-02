@@ -1,18 +1,18 @@
 import * as core from '@actions/core';
-import {exec} from '@actions/exec';
-import {parseInput} from './input';
-import {install as installLinter} from './setup-linter';
-import {install as installReporter} from './setup-reporter';
-import {buildArguments} from './linter';
-import {Input, Level, Options, Tool} from './types';
+import { exec } from '@actions/exec';
+import { parseInput } from './input';
+import { buildArguments } from './linter';
+import { install as installLinter } from './setup-linter';
+import { install as installReporter } from './setup-reporter';
+import type { Input, Level, Options, Tool } from './types';
 
 function createReporter(tool: Tool, level: Level): string {
-  const {path} = tool;
+  const { path } = tool;
   return `github?level=${level},artifact=${path}`;
 }
 
 async function check(input: Input) {
-  const {ktlintVersion, level} = input;
+  const { ktlintVersion, level } = input;
 
   await installLinter(ktlintVersion);
   const reporterTool = await installReporter(ktlintVersion);

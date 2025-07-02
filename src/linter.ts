@@ -1,4 +1,4 @@
-import {Options} from './types';
+import type { Options } from './types';
 
 function buildArguments(options?: Options): string[] {
   const args: string[] = [];
@@ -34,7 +34,7 @@ function buildArguments(options?: Options): string[] {
     args.push(`--code-style=${codeStyle}`);
   }
 
-  if (disabledRules != undefined && disabledRules.length > 0) {
+  if (disabledRules !== undefined && disabledRules.length > 0) {
     args.push(`--disabled_rules=${disabledRules.join(',')}`);
   }
 
@@ -94,4 +94,4 @@ function buildArguments(options?: Options): string[] {
   return args;
 }
 
-export {buildArguments};
+export { buildArguments };

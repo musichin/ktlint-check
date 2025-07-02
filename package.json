@@ -5,9 +5,10 @@
   "main": "lib/main.js",
   "scripts": {
     "compile": "tsc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
+    "format": "biome format --write ./src",
+    "format-check": "biome format ./src",
+    "lint": "biome lint --write ./src",
+    "lint-check": "biome lint ./src",
     "test": "jest",
     "build": "ncc build --source-map --license licenses.txt",
     "package": "npm run compile && npm run build"
@@ -29,18 +30,15 @@
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.2",
-    "semver": "^7.7.1"
+    "semver": "^7.7.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.23.0",
-    "@types/jest": "^29.5.14",
+    "@biomejs/biome": "^2.0.6",
+    "@types/jest": "^30.0.0",
     "@types/semver": "^7.7.0",
     "@vercel/ncc": "0.38.3",
-    "eslint": "^8.57.1",
-    "jest": "^29.7.0",
-    "prettier": "3.5.3",
-    "ts-jest": "^29.3.0",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0"
+    "jest": "^30.0.3",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
   }
 }

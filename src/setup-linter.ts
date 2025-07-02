@@ -1,7 +1,7 @@
+import * as fs from 'node:fs';
 import * as core from '@actions/core';
-import * as fs from 'fs';
-import {Tool} from './types';
-import {getOrDownload} from './tool-provisioner';
+import { getOrDownload } from './tool-provisioner';
+import type { Tool } from './types';
 
 const TOOL_NAME = 'ktlint';
 const TOOL_FILENAME = TOOL_NAME;
@@ -26,4 +26,4 @@ async function install(version: string): Promise<Tool> {
   return tool;
 }
 
-export {install};
+export { install };
