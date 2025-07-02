@@ -1,6 +1,6 @@
+import * as path from 'node:path';
 import * as tc from '@actions/tool-cache';
-import * as path from 'path';
-import {Tool} from './types';
+import type { Tool } from './types';
 
 function createTool(
   name: string,
@@ -42,4 +42,4 @@ async function getOrDownload(
   return createTool(name, path, version, fileName);
 }
 
-export {getOrDownload};
+export { getOrDownload };
