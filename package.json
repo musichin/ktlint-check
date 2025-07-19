@@ -33,11 +33,11 @@
     "semver": "^7.7.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.1.2",
     "@types/jest": "^30.0.0",
     "@types/semver": "^7.7.0",
     "@vercel/ncc": "0.38.3",
-    "jest": "^30.0.3",
+    "jest": "^30.0.4",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   }
