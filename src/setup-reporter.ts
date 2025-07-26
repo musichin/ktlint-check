@@ -23,7 +23,7 @@ function getToolVersion(ktlintVersion: string) {
     return '2.3.0';
   }
 
-  return '3.3.0';
+  return '3.3.1';
 }
 
 async function install(ktlintVersion: string): Promise<Tool> {

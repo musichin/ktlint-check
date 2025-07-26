@@ -20,7 +20,7 @@ steps:
   - uses: actions/checkout@v4
   - uses: musichin/ktlint-check@v3
     with:
-      ktlint-version: '1.7.0'
+      ktlint-version: '1.7.1'
 ```
 > ⚠️ Always specify a ktlint-version to avoid surprises.
 
@@ -31,7 +31,7 @@ steps:
   - uses: musichin/ktlint-check@v3
     continue-on-error: true
     with:
-      ktlint-version: '1.7.0'
+      ktlint-version: '1.7.1'
       level: 'warning'
 
       # ktlint

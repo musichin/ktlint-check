@@ -3,7 +3,7 @@ import {parseInput} from '../src/input';
 function setEnvVars(input?: {[key: string]: string}) {
   const variables: {[key: string]: string} = {
     level: 'error',
-    'ktlint-version': '1.7.0',
+    'ktlint-version': '1.7.1',
     android: '',
     limit: '',
     patterns: '',
@@ -24,9 +24,9 @@ describe('parseInput', () => {
     });
 
     test('valid', () => {
-      setEnvVars({'ktlint-version': '1.7.0'});
+      setEnvVars({'ktlint-version': '1.7.1'});
       const {ktlintVersion} = parseInput();
-      expect(ktlintVersion).toEqual('1.7.0');
+      expect(ktlintVersion).toEqual('1.7.1');
     });
   });
 

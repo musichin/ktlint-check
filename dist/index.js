@@ -351,7 +351,7 @@ function getToolVersion(ktlintVersion) {
     if (semver_1.default.lt(ktlintVersion, '0.49.0')) {
         return '2.3.0';
     }
-    return '3.3.0';
+    return '3.3.1';
 }
 async function install(ktlintVersion) {
     return await provision(getToolVersion(ktlintVersion));
