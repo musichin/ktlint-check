@@ -3,6 +3,7 @@ interface Options {
   codeStyle?: string;
   disabledRules?: string[];
   format?: boolean;
+  ignoreAutocorrectFailures?: boolean;
   limit?: number;
   relative?: boolean;
   reporter?: string[];

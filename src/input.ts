@@ -84,9 +84,7 @@ function getLevel(): Level {
   }
 
   if (!isLevel(level)) {
-    throw new Error(
-      'Input "level" must be one of: error, warning, notice or none',
-    );
+    throw new Error('Input "level" must be one of: error, warning, notice or none');
   }
 
   return level;
@@ -99,6 +97,7 @@ function parseInput(): Input {
   const patterns = getList('patterns');
   const codeStyle = getString('code-style');
   const format = getBoolean('format');
+  const ignoreAutocorrectFailures = getBoolean('ignore-autocorrect-failures');
   const limit = getInteger('limit');
   const relative = getBoolean('relative');
   const reporter = getList('reporter');
@@ -122,6 +121,7 @@ function parseInput(): Input {
     codeStyle,
     disabledRules,
     format,
+    ignoreAutocorrectFailures,
     limit,
     relative,
     reporter,
