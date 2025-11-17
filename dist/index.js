@@ -89,6 +89,7 @@ function parseInput() {
     const patterns = getList('patterns');
     const codeStyle = getString('code-style');
     const format = getBoolean('format');
+    const ignoreAutocorrectFailures = getBoolean('ignore-autocorrect-failures');
     const limit = getInteger('limit');
     const relative = getBoolean('relative');
     const reporter = getList('reporter');
@@ -109,6 +110,7 @@ function parseInput() {
         codeStyle,
         disabledRules,
         format,
+        ignoreAutocorrectFailures,
         limit,
         relative,
         reporter,
@@ -139,7 +141,7 @@ function buildArguments(options) {
     if (options === undefined) {
         return args;
     }
-    const { patterns, codeStyle, disabledRules, format, limit, relative, reporter, ruleset, editorconfig, experimental, baseline, logLevel, android, // deprecated
+    const { patterns, codeStyle, disabledRules, format, ignoreAutocorrectFailures, limit, relative, reporter, ruleset, editorconfig, experimental, baseline, logLevel, android, // deprecated
     debug, // deprecated
     trace, // deprecated
     verbose, // deprecated
@@ -156,6 +158,9 @@ function buildArguments(options) {
     if (format === true) {
         args.push('--format');
     }
+    if (ignoreAutocorrectFailures === true) {
+        args.push('--ignore-autocorrect-failures');
+    }
     if (limit !== undefined) {
         args.push(`--limit=${limit.toFixed()}`);
     }
@@ -163,7 +168,7 @@ function buildArguments(options) {
         args.push('--relative');
     }
     if (reporter !== undefined) {
-        reporter.forEach((r) => args.push(`--reporter=${r}`));
+        reporter.forEach((r) => void args.push(`--reporter=${r}`));
     }
     if (ruleset !== undefined) {
         args.push(`--ruleset=${ruleset}`);
@@ -178,7 +183,7 @@ function buildArguments(options) {
         args.push(`--baseline=${baseline}`);
     }
     if (patterns !== undefined) {
-        patterns.forEach((pattern) => args.push(pattern));
+        patterns.forEach((pattern) => void args.push(pattern));
     }
     // deprecated
     if (android === true) {
@@ -6586,6 +6591,7 @@ const isSatisfiable = (comparators, options) => {
 // already replaced the hyphen ranges
 // turn into a set of JUST comparators.
 const parseComparator = (comp, options) => {
+  comp = comp.replace(re[t.BUILD], '')
   debug('comp', comp, options)
   comp = replaceCarets(comp, options)
   debug('caret', comp)
@@ -7006,11 +7012,25 @@ class SemVer {
       other = new SemVer(other, this.options)
     }
 
-    return (
-      compareIdentifiers(this.major, other.major) ||
-      compareIdentifiers(this.minor, other.minor) ||
-      compareIdentifiers(this.patch, other.patch)
-    )
+    if (this.major < other.major) {
+      return -1
+    }
+    if (this.major > other.major) {
+      return 1
+    }
+    if (this.minor < other.minor) {
+      return -1
+    }
+    if (this.minor > other.minor) {
+      return 1
+    }
+    if (this.patch < other.patch) {
+      return -1
+    }
+    if (this.patch > other.patch) {
+      return 1
+    }
+    return 0
   }
 
   comparePre (other) {
@@ -7911,6 +7931,10 @@ module.exports = debug
 
 const numeric = /^[0-9]+$/
 const compareIdentifiers = (a, b) => {
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a === b ? 0 : a < b ? -1 : 1
+  }
+
   const anum = numeric.test(a)
   const bnum = numeric.test(b)
 

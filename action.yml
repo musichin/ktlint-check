@@ -8,8 +8,8 @@ branding:
 inputs:
   ktlint-version:
     required: true
-    default: '1.7.1'
-    description: 'Version of ktlint, e.g. "1.7.1"'
+    default: '1.8.0'
+    description: 'Version of ktlint, e.g. "1.8.0"'
   level:
     required: true
     default: 'error'
@@ -25,6 +25,8 @@ inputs:
   format:
     required: false
   limit:
+    required: false
+  ignore-autocorrect-failures:
     required: false
   relative:
     required: false
@@ -59,5 +61,5 @@ inputs:
     required: false
     deprecationMessage: deprecated
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

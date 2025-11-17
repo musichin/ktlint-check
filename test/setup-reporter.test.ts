@@ -1,4 +1,4 @@
-import {install} from '../src/setup-reporter';
+import { install } from '../src/setup-reporter';
 
 describe('#setup-reporter', () => {
   describe('#install', () => {
@@ -10,7 +10,7 @@ describe('#setup-reporter', () => {
     }, 60_000);
 
     test('ktlint version >= 0.49.0', async () => {
-      const tool = await install('1.7.1');
+      const tool = await install('1.8.0');
       expect(tool).toBeTruthy();
       expect(tool.name).toStrictEqual('ktlint-github-reporter');
       expect(tool.version).toStrictEqual('3.3.1');

@@ -1,16 +1,21 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": false
+    "useIgnoreFile": false,
+    "defaultBranch": "main"
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "includes": ["**", "!package-lock.json", "!coverage", "!lib", "!dist"]
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "lineWidth": 120,
+    "indentWidth": 2,
+    "lineEnding": "lf"
   },
   "linter": {
     "enabled": true,

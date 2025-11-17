@@ -1,5 +1,5 @@
-import {buildArguments} from '../src/linter';
-import {Options} from '../src/types';
+import { buildArguments } from '../src/linter';
+import type { Options } from '../src/types';
 
 describe('#linter', () => {
   describe('#buildArguments', () => {
@@ -18,6 +18,7 @@ describe('#linter', () => {
         disabledRules: ['testRule'],
         format: true,
         limit: 10,
+        ignoreAutocorrectFailures: true,
         relative: true,
         reporter: ['testReporter'],
         ruleset: 'testRuleset',
@@ -34,12 +35,13 @@ describe('#linter', () => {
       };
       const args = buildArguments(options);
 
-      expect(args.length).toStrictEqual(16);
+      expect(args.length).toStrictEqual(17);
       expect(args).toContain('testPattern');
       expect(args).toContain('--code-style=testCodeStyle');
       expect(args).toContain('--disabled_rules=testRule');
       expect(args).toContain('--format');
       expect(args).toContain('--limit=10');
+      expect(args).toContain('--ignore-autocorrect-failures');
       expect(args).toContain('--relative');
       expect(args).toContain('--reporter=testReporter');
       expect(args).toContain('--ruleset=testRuleset');

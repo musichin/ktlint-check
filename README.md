@@ -17,21 +17,21 @@ See [action.yml](action.yml)
 **Basic:**
 ```yaml
 steps:
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v5
   - uses: musichin/ktlint-check@v3
     with:
-      ktlint-version: '1.7.1'
+      ktlint-version: '1.8.0'
 ```
 > ⚠️ Always specify a ktlint-version to avoid surprises.
 
 **Advanced**
 ```yaml
 steps:
-  - uses: actions/checkout@v4
+  - uses: actions/checkout@v5
   - uses: musichin/ktlint-check@v3
     continue-on-error: true
     with:
-      ktlint-version: '1.7.1'
+      ktlint-version: '1.8.0'
       level: 'warning'
 
       # ktlint

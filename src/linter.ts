@@ -11,6 +11,7 @@ function buildArguments(options?: Options): string[] {
     codeStyle,
     disabledRules,
     format,
+    ignoreAutocorrectFailures,
     limit,
     relative,
     reporter,
@@ -42,6 +43,10 @@ function buildArguments(options?: Options): string[] {
     args.push('--format');
   }
 
+  if (ignoreAutocorrectFailures === true) {
+    args.push('--ignore-autocorrect-failures');
+  }
+
   if (limit !== undefined) {
     args.push(`--limit=${limit.toFixed()}`);
   }
@@ -51,7 +56,7 @@ function buildArguments(options?: Options): string[] {
   }
 
   if (reporter !== undefined) {
-    reporter.forEach((r) => args.push(`--reporter=${r}`));
+    reporter.forEach((r) => void args.push(`--reporter=${r}`));
   }
 
   if (ruleset !== undefined) {
@@ -71,7 +76,7 @@ function buildArguments(options?: Options): string[] {
   }
 
   if (patterns !== undefined) {
-    patterns.forEach((pattern) => args.push(pattern));
+    patterns.forEach((pattern) => void args.push(pattern));
   }
 
   // deprecated

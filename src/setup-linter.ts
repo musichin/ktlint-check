@@ -11,12 +11,7 @@ function buildDownloadUrl(version: string): string {
 }
 
 async function provision(version: string): Promise<Tool> {
-  return getOrDownload(
-    TOOL_NAME,
-    version,
-    buildDownloadUrl(version),
-    TOOL_FILENAME,
-  );
+  return getOrDownload(TOOL_NAME, version, buildDownloadUrl(version), TOOL_FILENAME);
 }
 
 async function install(version: string): Promise<Tool> {

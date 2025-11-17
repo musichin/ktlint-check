@@ -5,10 +5,10 @@
   "main": "lib/main.js",
   "scripts": {
     "compile": "tsc",
-    "format": "biome format --write ./src",
-    "format-check": "biome format ./src",
-    "lint": "biome lint --write ./src",
-    "lint-check": "biome lint ./src",
+    "format": "biome format --write",
+    "format-check": "biome format",
+    "lint": "biome lint --write",
+    "lint-check": "biome lint",
     "test": "jest",
     "build": "ncc build --source-map --license licenses.txt",
     "package": "npm run compile && npm run build"
@@ -30,15 +30,15 @@
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.2",
-    "semver": "^7.7.2"
+    "semver": "^7.7.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
+    "@biomejs/biome": "^2.3.6",
     "@types/jest": "^30.0.0",
-    "@types/semver": "^7.7.0",
-    "@vercel/ncc": "0.38.3",
-    "jest": "^30.0.5",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3"
+    "@types/semver": "^7.7.1",
+    "@vercel/ncc": "0.38.4",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
   }
 }
