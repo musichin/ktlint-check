@@ -17,8 +17,8 @@ See [action.yml](action.yml)
 **Basic:**
 ```yaml
 steps:
-  - uses: actions/checkout@v5
-  - uses: musichin/ktlint-check@v3
+  - uses: actions/checkout@v6
+  - uses: musichin/ktlint-check@v4
     with:
       ktlint-version: '1.8.0'
 ```
@@ -27,8 +27,8 @@ steps:
 **Advanced**
 ```yaml
 steps:
-  - uses: actions/checkout@v5
-  - uses: musichin/ktlint-check@v3
+  - uses: actions/checkout@v6
+  - uses: musichin/ktlint-check@v4
     continue-on-error: true
     with:
       ktlint-version: '1.8.0'
