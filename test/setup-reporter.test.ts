@@ -13,7 +13,7 @@ describe('#setup-reporter', () => {
       const tool = await install('1.8.0');
       expect(tool).toBeTruthy();
       expect(tool.name).toStrictEqual('ktlint-github-reporter');
-      expect(tool.version).toStrictEqual('3.3.1');
+      expect(tool.version).toStrictEqual('3.4.0');
     }, 60_000);
   });
 });
