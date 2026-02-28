@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
-import { parseInput } from './input';
-import { buildArguments } from './linter';
-import { install as installLinter } from './setup-linter';
-import { install as installReporter } from './setup-reporter';
-import type { Input, Level, Options, Tool } from './types';
+import { parseInput } from './input.js';
+import { buildArguments } from './linter.js';
+import { install as installLinter } from './setup-linter.js';
+import { install as installReporter } from './setup-reporter.js';
+import type { Input, Level, Options, Tool } from './types.js';
 
 function createReporter(tool: Tool, level: Level): string {
   const { path } = tool;

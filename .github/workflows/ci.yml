@@ -25,11 +25,8 @@ jobs:
       - name: compile
         run: npm run compile
 
-      - name: format-check
-        run: npm run format-check
-
-      - name: lint
-        run: npm run lint-check
+      - name: check
+        run: npm run check:ci
 
       - name: build
         run: npm run build
@@ -41,3 +38,5 @@ jobs:
         run: git diff --name-only --quiet
 
       - uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

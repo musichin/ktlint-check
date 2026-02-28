@@ -1,5 +1,5 @@
 import { getBooleanInput, getInput } from '@actions/core';
-import type { Input, Level } from './types';
+import type { Input, Level } from './types.js';
 
 function getBoolean(name: string): boolean | undefined {
   try {
