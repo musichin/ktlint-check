@@ -1,6 +1,6 @@
 import semver from 'semver';
-import { getOrDownload } from './tool-provisioner';
-import type { Tool } from './types';
+import { getOrDownload } from './tool-provisioner.js';
+import type { Tool } from './types.js';
 
 const TOOL_NAME = 'ktlint-github-reporter';
 const TOOL_FILENAME = `${TOOL_NAME}.jar`;

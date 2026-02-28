@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as tc from '@actions/tool-cache';
-import type { Tool } from './types';
+import type { Tool } from './types.js';
 
 function createTool(name: string, directory: string, version: string, fileName: string): Tool {
   return {

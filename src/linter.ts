@@ -1,4 +1,4 @@
-import type { Options } from './types';
+import type { Options } from './types.js';
 
 function buildArguments(options?: Options): string[] {
   const args: string[] = [];

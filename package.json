@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "GitHUb action for ktlint",
   "main": "lib/main.js",
+  "type": "module",
   "scripts": {
     "compile": "tsc",
-    "format": "biome format --write",
-    "format-check": "biome format",
-    "lint": "biome lint --write",
-    "lint-check": "biome lint",
-    "test": "jest",
+    "format:fix": "biome format --write",
+    "format": "biome format",
+    "lint:fix": "biome lint --write",
+    "lint": "biome lint",
+    "check": "biome check",
+    "check:fix": "biome check --write",
+    "check:ci": "biome ci --reporter=github",
+    "test": "vitest run --coverage",
     "build": "ncc build --source-map --license licenses.txt",
     "package": "npm run compile && npm run build"
   },
@@ -27,18 +31,18 @@
   },
   "homepage": "https://github.com/musichin/ktlint-check",
   "dependencies": {
-    "@actions/core": "^2.0.1",
-    "@actions/exec": "^2.0.0",
-    "@actions/tool-cache": "^2.0.2",
-    "semver": "^7.7.3"
+    "@actions/core": "^3.0.0",
+    "@actions/exec": "^3.0.0",
+    "@actions/tool-cache": "^4.0.0",
+    "semver": "^7.7.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.10",
+    "@biomejs/biome": "^2.4.4",
     "@types/jest": "^30.0.0",
     "@types/semver": "^7.7.1",
     "@vercel/ncc": "0.38.4",
-    "jest": "^30.2.0",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3"
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }
