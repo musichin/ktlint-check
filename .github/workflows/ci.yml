@@ -37,6 +37,6 @@ jobs:
       - name: check dist is up-to-date
         run: git diff --name-only --quiet
 
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
