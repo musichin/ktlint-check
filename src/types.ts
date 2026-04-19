@@ -49,4 +49,4 @@ interface Tool {
   path: string;
 }
 
-export type { Options, Input, Level, Tool };
+export type { Input, Level, Options, Tool };

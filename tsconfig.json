@@ -2,8 +2,8 @@
   "compilerOptions": {
     "types": ["node", "vitest/globals"],
     "target": "ES2023",
-    "lib": ["ES2023"],
-    "module": "nodenext",
+    "lib": ["ES2024"],
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./lib",
     "rootDir": "./src",
