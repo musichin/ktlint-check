@@ -27,7 +27,7 @@ steps:
 **Advanced**
 ```yaml
 steps:
-  - uses: actions/checkout@v6
+  - uses: actions/checkout@v7
   - uses: musichin/ktlint-check@v4
     continue-on-error: true
     with:
