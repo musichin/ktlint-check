@@ -5,7 +5,7 @@
   "main": "lib/main.js",
   "type": "module",
   "scripts": {
-    "compile": "tsc",
+    "typecheck": "tsc --noEmit",
     "format:fix": "biome format --write",
     "format": "biome format",
     "lint:fix": "biome lint --write",
@@ -14,15 +14,14 @@
     "check:fix": "biome check --write",
     "check:ci": "biome ci --reporter=github",
     "test": "vitest run --coverage",
-    "build": "ncc build --source-map --license licenses.txt",
-    "package": "npm run compile && npm run build"
+    "build": "node build.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/musichin/ktlint-check.git"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "author": "Anton Musichin",
   "license": "MIT",
@@ -37,12 +36,12 @@
     "semver": "^7.8.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
+    "@biomejs/biome": "^2.5.6",
     "@types/jest": "^30.0.0",
     "@types/semver": "^7.7.1",
-    "@vercel/ncc": "0.44.0",
-    "@vitest/coverage-v8": "^4.1.9",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "@vitest/coverage-v8": "^4.1.10",
+    "esbuild": "^0.28.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
   }
 }
