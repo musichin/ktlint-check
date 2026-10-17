@@ -12,17 +12,13 @@ interface Options {
   experimental?: boolean;
   baseline?: string;
   logLevel?: string;
-
-  android?: boolean; // deprecated
-  debug?: boolean; // deprecated
-  trace?: boolean; // deprecated
-  verbose?: boolean; // deprecated
 }
 
 type Level = 'error' | 'warning' | 'notice' | 'none';
 
 interface Input extends Options {
   ktlintVersion: string;
+  ktlintSha256?: string;
   level: Level;
 }
 
