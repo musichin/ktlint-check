@@ -20,11 +20,6 @@ function buildArguments(options?: Options): string[] {
     experimental,
     baseline,
     logLevel,
-
-    android, // deprecated
-    debug, // deprecated
-    trace, // deprecated
-    verbose, // deprecated
   } = options;
 
   if (logLevel !== undefined) {
@@ -77,23 +72,6 @@ function buildArguments(options?: Options): string[] {
 
   if (patterns !== undefined) {
     patterns.forEach((pattern) => void args.push(pattern));
-  }
-
-  // deprecated
-  if (android === true) {
-    args.push('--android');
-  }
-
-  if (debug === true) {
-    args.push('--debug');
-  }
-
-  if (trace === true) {
-    args.push('--trace');
-  }
-
-  if (verbose === true) {
-    args.push('--verbose');
   }
 
   return args;

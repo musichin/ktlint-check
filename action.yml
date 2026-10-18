@@ -8,8 +8,8 @@ branding:
 inputs:
   ktlint-version:
     required: true
-    default: '1.8.0'
-    description: 'Version of ktlint, e.g. "1.8.0"'
+    default: '1.8.0@sha256:a3fd620207d5c40da6ca789b95e7f823c54e854b7fade7f613e91096a3706d75'
+    description: 'Version of ktlint, e.g. "1.8.0". Optionally followed by "@sha256:<checksum>" to verify the download.'
   level:
     required: true
     default: 'error'
@@ -42,18 +42,6 @@ inputs:
     required: false
   log-level:
     required: false
-  android:
-    required: false
-    deprecationMessage: code-style
-  debug:
-    required: false
-    deprecationMessage: log-level
-  trace:
-    required: false
-    deprecationMessage: log-level
-  verbose:
-    required: false
-    deprecationMessage: log-level
   disabled_rules:
     required: false
     deprecationMessage: deprecated

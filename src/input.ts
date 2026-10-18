@@ -1,5 +1,8 @@
 import { getBooleanInput, getInput } from '@actions/core';
+import semver from 'semver';
 import type { Input, Level } from './types.js';
+
+const MIN_KTLINT_VERSION = '1.0.0';
 
 function getBoolean(name: string): boolean | undefined {
   try {
@@ -64,13 +67,27 @@ function getInteger(name: string): number | undefined {
   return value;
 }
 
-function getKtlintVersion(): string {
-  const ktlintVersion = getString('ktlint-version');
-  if (ktlintVersion === undefined) {
+function getKtlintVersion(): { version: string; sha256?: string } {
+  const input = getString('ktlint-version');
+  if (input === undefined) {
     throw new Error('Input "ktlint-version" required but not supplied');
   }
 
-  return ktlintVersion;
+  const { version, sha256 } = /^(?<version>[^@]+)(?:@sha256:(?<sha256>[0-9a-f]{64}))?$/i.exec(input)?.groups ?? {};
+  if (version === undefined) {
+    throw new Error('Input "ktlint-version" must be a version, optionally followed by "@sha256:<checksum>"');
+  }
+
+  const cleanVersion = semver.clean(version);
+  if (cleanVersion === null) {
+    throw new Error('Input "ktlint-version" must be a valid version, e.g. "1.8.0"');
+  }
+
+  if (semver.lt(cleanVersion, MIN_KTLINT_VERSION)) {
+    throw new Error(`Input "ktlint-version" must be ${MIN_KTLINT_VERSION} or newer, got ${cleanVersion}`);
+  }
+
+  return { version: cleanVersion, sha256: sha256?.toLowerCase() };
 }
 
 function isLevel(level: string): level is Level {
@@ -91,7 +108,7 @@ function getLevel(): Level {
 }
 
 function parseInput(): Input {
-  const ktlintVersion = getKtlintVersion();
+  const { version: ktlintVersion, sha256: ktlintSha256 } = getKtlintVersion();
   const level = getLevel();
 
   const patterns = getList('patterns');
@@ -107,14 +124,11 @@ function parseInput(): Input {
   const baseline = getString('baseline');
   const logLevel = getString('log-level');
 
-  const android = getBoolean('android'); // deprecated
-  const debug = getBoolean('debug'); // deprecated
-  const trace = getBoolean('trace'); // deprecated
-  const verbose = getBoolean('verbose'); // deprecated
   const disabledRules = getList('disabled-rules') ?? getList('disabled_rules'); // deprecated
 
   return {
     ktlintVersion,
+    ktlintSha256,
     level,
 
     patterns,
@@ -130,11 +144,6 @@ function parseInput(): Input {
     experimental,
     baseline,
     logLevel,
-
-    android,
-    debug,
-    trace,
-    verbose,
   };
 }
 

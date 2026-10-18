@@ -12,10 +12,10 @@ function createReporter(tool: Tool, level: Level): string {
 }
 
 async function check(input: Input) {
-  const { ktlintVersion, level } = input;
+  const { ktlintVersion, ktlintSha256, level } = input;
 
-  await installLinter(ktlintVersion);
-  const reporterTool = await installReporter(ktlintVersion);
+  const linterTool = await installLinter(ktlintVersion, ktlintSha256);
+  const reporterTool = await installReporter();
   const reporter = createReporter(reporterTool, level);
   const options: Options = {
     ...input,
@@ -23,7 +23,11 @@ async function check(input: Input) {
   };
 
   const args = buildArguments(options);
-  await exec('ktlint', args);
+  await exec('java', ['-jar', linterTool.path, ...args]);
 }
 
-check(parseInput()).catch(core.setFailed);
+async function run() {
+  await check(parseInput());
+}
+
+run().catch(core.setFailed);

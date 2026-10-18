@@ -1,10 +1,11 @@
 import { parseInput } from '../src/input';
 
+const SHA256 = 'a3fd620207d5c40da6ca789b95e7f823c54e854b7fade7f613e91096a3706d75';
+
 function setEnvVars(input?: { [key: string]: string }) {
   const variables: { [key: string]: string } = {
     level: 'error',
     'ktlint-version': '1.8.0',
-    android: '',
     limit: '',
     'ignore-autocorrect-failures': '',
     'disabled-rules': '',
@@ -30,6 +31,64 @@ describe('parseInput', () => {
       const { ktlintVersion } = parseInput();
       expect(ktlintVersion).toEqual('1.8.0');
     });
+
+    test('leading v', () => {
+      setEnvVars({ 'ktlint-version': 'v1.8.0' });
+      const { ktlintVersion } = parseInput();
+      expect(ktlintVersion).toEqual('1.8.0');
+    });
+
+    test('invalid', () => {
+      setEnvVars({ 'ktlint-version': 'latest' });
+      expect(() => parseInput()).toThrow('Input "ktlint-version" must be a valid version, e.g. "1.8.0"');
+    });
+
+    test('older than 1.0.0', () => {
+      setEnvVars({ 'ktlint-version': '0.50.0' });
+      expect(() => parseInput()).toThrow('Input "ktlint-version" must be 1.0.0 or newer, got 0.50.0');
+    });
+
+    test('pre-release of 1.0.0', () => {
+      setEnvVars({ 'ktlint-version': '1.0.0-rc1' });
+      expect(() => parseInput()).toThrow('Input "ktlint-version" must be 1.0.0 or newer, got 1.0.0-rc1');
+    });
+
+    test('1.0.0', () => {
+      setEnvVars({ 'ktlint-version': '1.0.0' });
+      const { ktlintVersion } = parseInput();
+      expect(ktlintVersion).toEqual('1.0.0');
+    });
+
+    test('without sha256', () => {
+      setEnvVars({ 'ktlint-version': '1.8.0' });
+      const { ktlintSha256 } = parseInput();
+      expect(ktlintSha256).toBeUndefined();
+    });
+
+    test('with sha256', () => {
+      setEnvVars({ 'ktlint-version': `v1.8.0@sha256:${SHA256}` });
+      const { ktlintVersion, ktlintSha256 } = parseInput();
+      expect(ktlintVersion).toEqual('1.8.0');
+      expect(ktlintSha256).toEqual(SHA256);
+    });
+
+    test('with uppercase sha256', () => {
+      setEnvVars({ 'ktlint-version': `1.8.0@sha256:${SHA256.toUpperCase()}` });
+      const { ktlintSha256 } = parseInput();
+      expect(ktlintSha256).toEqual(SHA256);
+    });
+
+    test('with invalid sha256', () => {
+      setEnvVars({ 'ktlint-version': '1.8.0@sha256:abc' });
+      expect(() => parseInput()).toThrow(
+        'Input "ktlint-version" must be a version, optionally followed by "@sha256:<checksum>"',
+      );
+    });
+
+    test('with invalid version and sha256', () => {
+      setEnvVars({ 'ktlint-version': `latest@sha256:${SHA256}` });
+      expect(() => parseInput()).toThrow('Input "ktlint-version" must be a valid version, e.g. "1.8.0"');
+    });
   });
 
   describe('level', () => {
@@ -47,31 +106,6 @@ describe('parseInput', () => {
       setEnvVars({ level: 'warning' });
       const { level } = parseInput();
       expect(level).toEqual('warning');
-    });
-  });
-
-  describe('android', () => {
-    test('undefined', () => {
-      setEnvVars({ android: '' });
-      const { android } = parseInput();
-      expect(android).toBeUndefined();
-    });
-
-    test('false', () => {
-      setEnvVars({ android: 'false' });
-      const { android } = parseInput();
-      expect(android).toStrictEqual(false);
-    });
-
-    test('true', () => {
-      setEnvVars({ android: 'true' });
-      const { android } = parseInput();
-      expect(android).toStrictEqual(true);
-    });
-
-    test('invalid', () => {
-      setEnvVars({ android: 'not_a_boolean' });
-      expect(() => parseInput()).toThrow('Input "android" must be a boolean');
     });
   });
 
